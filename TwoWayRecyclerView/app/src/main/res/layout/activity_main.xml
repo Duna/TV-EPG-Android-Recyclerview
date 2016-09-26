@@ -6,11 +6,15 @@
     tools:context="project.samp.mariusduna.twowayrecyclerview.MainActivity">
 
     <TextView
+        android:id="@+id/current_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/channels_recycler_view"
-        android:layout_toStartOf="@+id/timeline_recycler_view"
-        android:text="EPG!" />
+        android:gravity="center"
+        android:text="EPG!"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/timeline_recycler_view" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/timeline_recycler_view"

@@ -11,17 +11,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
-import android.view.ViewConfiguration;
+import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.HeaderChannelsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.TimelineAdapter;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
+import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView epgRecyclerView;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Subject subject = new Subject();
 
     private LinearLayoutManager horizontalLayoutManagaer;
+    private TextView currentTimeTextView;
 
     private float mDownX;
     private float mDownY;
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        currentTimeTextView = (TextView) findViewById(R.id.current_time);
         epgRecyclerView = (RecyclerView) findViewById(R.id.epg_recycler_view);
         timelineRecyclerView = (RecyclerView) findViewById(R.id.timeline_recycler_view);
         channelsRecyclerView = (RecyclerView) findViewById(R.id.channels_recycler_view);
@@ -117,6 +123,22 @@ public class MainActivity extends AppCompatActivity {
         epgRecyclerView.setLayoutManager(epgLayoutmanager);
         channelsRecyclerView.setLayoutManager(channelsLayoutmanager);
 
+        //start set start position for timeline recyclerview
+        Date date1 = new Date(nowTime);
+        DateFormat minutesFormat = new SimpleDateFormat("mm");
+        DateFormat secondsFormat = new SimpleDateFormat("ss");
+        long minutes1 = Integer.parseInt(minutesFormat.format(date1));
+        long seconds1 = Integer.parseInt(secondsFormat.format(date1));
+        long totalSeconds = TimeUnit.MINUTES.toSeconds(minutes1) + seconds1;
+        //TODO here is a bug
+        long diffProgramStart = TimeUnit.MINUTES.toSeconds(30) - totalSeconds;
+        float diffProgramStartMillis = TimeUnit.SECONDS.toMillis(diffProgramStart);
+        horizontalLayoutManagaer.scrollToPositionWithOffset(getNowPositionTimeline(), (int)Utils.convertMillisecondsToPx(diffProgramStartMillis, getApplicationContext()));
+        //end set start position for timeline recyclerview
+
+        subject.setPositionInList(getNowPositionTimeline());
+        subject.setCurrentTime(nowTime);
+
         timelineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -126,14 +148,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                subject.setState(dx);//we should store the time
+                subject.setState(dx); //we should store the time
+                double currentTime = subject.getCurrentTime();
+                double millisPx = Utils.convertPxToMilliseconds(dx > 0 ? dx : -dx, getApplicationContext());
+                double finalValue = dx > 0 ? currentTime + millisPx : currentTime - millisPx;
+                subject.setCurrentTime(finalValue);
+                updateCurrentTime((long)finalValue);
+            }
+
+            private void updateCurrentTime(long currentTime) {
+                Date date = new Date(currentTime);
+                DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM hh:mm:ss");
+                currentTimeTextView.setText(dateFormat.format(date));
             }
         });
 
         epgRecyclerView.setAdapter(epgAdapter);
-
-        timelineRecyclerView.scrollToPosition(getNowPositionTimeline());
-        subject.setPositionInList(getNowPositionTimeline());
     }
 
     private int getNowPositionTimeline() {

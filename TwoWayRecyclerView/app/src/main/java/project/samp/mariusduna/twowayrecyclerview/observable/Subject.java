@@ -15,6 +15,7 @@ public class Subject {
     private Handler handler = new Handler();
     private List<ObservableRecyclerView> observers = new ArrayList<ObservableRecyclerView>();
     private int positionInList;
+    private double currentTime;
 
     public Handler getHandler() {
         return handler;
@@ -29,14 +30,14 @@ public class Subject {
         return initialPosition;
     }
 
-    public int getPositionInList(){
+    public int getPositionInList() {
         return positionInList;
     }
 
     public void setState(int dx) {
         this.dx = dx;
-        Log.d("POS", "DX position: " + dx);
-        Log.d("POS", "Initial position: " + initialPosition);
+        /*Log.d("POS", "DX position: " + dx);
+        Log.d("POS", "Initial position: " + initialPosition);*/
         this.initialPosition = initialPosition - dx;
         notifyAllObservers();
     }
@@ -55,5 +56,14 @@ public class Subject {
 
     public void setPositionInList(int pos) {
         positionInList = pos;
+    }
+
+    public double getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(double currentTime) {
+        this.currentTime = currentTime;
+        Log.d("POS", "Current time " + currentTime);
     }
 }

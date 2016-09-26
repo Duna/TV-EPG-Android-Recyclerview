@@ -1,5 +1,6 @@
 package project.samp.mariusduna.twowayrecyclerview.adapter;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
@@ -18,7 +18,7 @@ import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
  */
 public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.ProgramsViewHolder> {
 
-    private List<ProgramModel> horizontalList;
+    private ArrayList<ProgramModel> horizontalList;
 
     public class ProgramsViewHolder extends RecyclerView.ViewHolder {
         public TextView textTitle;
@@ -30,7 +30,6 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             textDescription = (TextView) view.findViewById(R.id.program_description);
         }
     }
-
 
     public ProgramsAdapter(ArrayList<ProgramModel> horizontalList) {
         this.horizontalList = horizontalList;
@@ -48,7 +47,11 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         holder.textTitle.setText(programModel.getTitle());
         holder.textDescription.setText(programModel.getDescription());
         holder.textTitle.setBackgroundColor(programModel.getColorTitle());
-        holder.textDescription.setBackgroundColor(programModel.getColorDescription());
+        if (programModel.getStartTime() < System.currentTimeMillis() && System.currentTimeMillis() < programModel.getEndTime()) {
+            holder.textDescription.setBackgroundColor(ContextCompat.getColor(holder.textTitle.getContext(), android.R.color.black));
+        } else {
+            holder.textDescription.setBackgroundColor(programModel.getColorDescription());
+        }
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         int dp = (int) Utils.convertMillisecondsToDp(programModel.getEndTime() - programModel.getStartTime(), holder.textTitle.getContext());
         layoutParams.width = dp;
@@ -65,5 +68,9 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     @Override
     public int getItemCount() {
         return horizontalList.size();
+    }
+
+    public ArrayList<ProgramModel> getArrayList() {
+        return horizontalList;
     }
 }
