@@ -11,7 +11,7 @@
         android:id="@+id/text_timeline"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/default_color"
+        android:background="@color/default_color_dark"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white" />

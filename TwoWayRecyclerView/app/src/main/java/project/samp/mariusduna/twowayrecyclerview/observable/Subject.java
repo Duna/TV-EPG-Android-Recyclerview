@@ -30,10 +30,6 @@ public class Subject {
         return initialPosition;
     }
 
-    public int getPositionInList() {
-        return positionInList;
-    }
-
     public void setState(int dx) {
         this.dx = dx;
         /*Log.d("POS", "DX position: " + dx);
@@ -52,10 +48,6 @@ public class Subject {
         for (ObservableRecyclerView observer : observers) {
             observer.update();
         }
-    }
-
-    public void setPositionInList(int pos) {
-        positionInList = pos;
     }
 
     public double getCurrentTime() {
