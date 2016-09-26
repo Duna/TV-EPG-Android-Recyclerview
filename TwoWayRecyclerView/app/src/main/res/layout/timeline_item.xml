@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/epg_width_thirty_min"
+    android:layout_height="@dimen/epg_timeline_height"
+    android:layout_gravity="center"
+    android:background="@color/default_color"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_timeline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white" />
+</LinearLayout>

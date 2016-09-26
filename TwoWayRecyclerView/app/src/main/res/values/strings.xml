@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Recycler EPG</string>
+    <string name="mini_epg_now_header">Now</string>
+</resources>

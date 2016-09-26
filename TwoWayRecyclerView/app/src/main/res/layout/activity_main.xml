@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="project.samp.mariusduna.twowayrecyclerview.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/channels_recycler_view"
+        android:layout_toStartOf="@+id/timeline_recycler_view"
+        android:text="EPG!" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/timeline_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:layout_toEndOf="@+id/channels_recycler_view"
+        android:background="#fff" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/channels_recycler_view"
+        android:layout_width="@dimen/epg_item_container_height"
+        android:layout_height="match_parent"
+        android:layout_below="@id/timeline_recycler_view"
+        android:background="#fff" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/epg_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/timeline_recycler_view"
+        android:layout_toEndOf="@id/channels_recycler_view"
+        android:background="#fff" />
+
+    <View
+        android:id="@+id/epg_now_line"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/channels_recycler_view"
+        android:background="@android:color/white" />
+
+    <TextView
+        android:id="@+id/epg_now_indicator"
+        android:layout_width="65dp"
+        android:layout_height="36dp"
+        android:layout_above="@+id/epg_now_line"
+        android:layout_toStartOf="@+id/epg_now_line"
+        android:clickable="true"
+        android:text="@string/mini_epg_now_header"
+        android:textAllCaps="true"
+        android:background="@drawable/ic_now_center"
+        android:textColor="@android:color/white"
+        android:textSize="12sp" />
+</RelativeLayout>
