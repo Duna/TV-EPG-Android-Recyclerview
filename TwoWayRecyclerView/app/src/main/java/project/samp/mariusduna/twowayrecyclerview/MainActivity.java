@@ -68,8 +68,9 @@ public class MainActivity extends AppCompatActivity {
         nowTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long offsetStartMillis = Utils.getTimelineOffset(nowTime, getApplicationContext());
-                subject.setState((int) Utils.convertMillisecondsToPx(offsetStartMillis, getApplicationContext()));
+                //long offsetStartMillis = Utils.getTimelineOffset(nowTime, getApplicationContext());
+                //subject.setState((int) Utils.convertMillisecondsToPx(offsetStartMillis, getApplicationContext()));
+                //subject.setState(0);
                 subject.setCurrentTime(nowTime);
                 subject.resetAllObservers();
                 int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 ProgramModel programModel = new ProgramModel();
                 programModel.setStartTime(i);
                 Random randw = new Random();
-                i = i + fifteenMin + randw.nextInt(hour);
+                i = i + randw.nextInt(hour);
                 programModel.setEndTime(i);
                 programModel.setTitle("Title");
                 programModel.setDescription("Description");
