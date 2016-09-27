@@ -72,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 subject.setCurrentTime(nowTime);
                 subject.resetAllObservers();
 
-                horizontalLayoutManagaer.scrollToPositionWithOffset(Utils.getInitialPositionInTimelineList(subject.getCurrentTime(), timelineList),
-                        (int) Utils.convertMillisecondsToPx(offsetStartMillis, getApplicationContext()));
+                horizontalLayoutManagaer.scrollToPositionWithOffset(Utils.getInitialPositionInTimelineList(nowTime, timelineList), -Utils.getTimelineOffset(nowTime, getApplicationContext()));
             }
         });
 
@@ -146,12 +145,6 @@ public class MainActivity extends AppCompatActivity {
         epgRecyclerView.setLayoutManager(epgLayoutmanager);
         channelsRecyclerView.setLayoutManager(channelsLayoutmanager);
 
-        //start set start position for timeline recyclerview
-        horizontalLayoutManagaer.scrollToPositionWithOffset(Utils.getInitialPositionInTimelineList(nowTime, timelineList), -Utils.getTimelineOffset(nowTime, getApplicationContext()));
-        //getInitialPositionInTimelineList(nowTime, timelineList),0);
-        // (int) Utils.convertMillisecondsToPx(diffProgramStartMillis, getApplicationContext()));
-        //end set start position for timeline recyclerview
-
         timelineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -172,20 +165,20 @@ public class MainActivity extends AppCompatActivity {
 
             private void updateNowIndicator() {
                 float positionOnScreen = Utils.convertMillisecondsToPx((float) (nowTime - subject.getCurrentTime()), getApplicationContext());
-                if (positionOnScreen < channelsRecyclerView.getWidth()) {
+                if (positionOnScreen + channelsRecyclerView.getWidth() < channelsRecyclerView.getWidth()) {
                     nowVerticalLineView.setVisibility(View.INVISIBLE);
                     nowTextView.setBackgroundResource(R.drawable.ic_now_left);
                     nowTextView.setX(channelsRecyclerView.getWidth());
                 }
-                if (positionOnScreen >= channelsRecyclerView.getWidth() && positionOnScreen < screenWidth) {
+                if (positionOnScreen + channelsRecyclerView.getWidth() >= channelsRecyclerView.getWidth() && positionOnScreen < screenWidth) {
                     if (nowVerticalLineView.getVisibility() == View.INVISIBLE) {
                         nowVerticalLineView.setVisibility(View.VISIBLE);
                         nowTextView.setBackgroundResource(R.drawable.ic_now_center);
                     }
-                    nowVerticalLineView.setX(positionOnScreen);
-                    nowTextView.setX(positionOnScreen - nowTextView.getWidth() / 2);
+                    nowVerticalLineView.setX(positionOnScreen + channelsRecyclerView.getWidth());
+                    nowTextView.setX(positionOnScreen - nowTextView.getWidth() / 2 + channelsRecyclerView.getWidth());
                 }
-                if (positionOnScreen >= screenWidth) {
+                if (positionOnScreen + channelsRecyclerView.getWidth() >= screenWidth) {
                     nowVerticalLineView.setVisibility(View.INVISIBLE);
                     nowTextView.setX(screenWidth - nowTextView.getWidth());
                     nowTextView.setBackgroundResource(R.drawable.ic_now_right);
@@ -198,6 +191,8 @@ public class MainActivity extends AppCompatActivity {
                 currentTimeTextView.setText(dateFormat.format(date));
             }
         });
+        subject.setCurrentTime(nowTime);
+        horizontalLayoutManagaer.scrollToPositionWithOffset(Utils.getInitialPositionInTimelineList(nowTime, timelineList), -Utils.getTimelineOffset(nowTime, getApplicationContext()));
 
         epgRecyclerView.setAdapter(epgAdapter);
     }
