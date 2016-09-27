@@ -51,15 +51,15 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
 
         public void initialScroll() {
             ArrayList<ProgramModel> list = ((ProgramsAdapter) recyclerView.getAdapter()).getArrayList();
-            final int initialPosition = Utils.getInitialPositionInList(subject.getCurrentTime(), list);
-            final float initialOffset = Utils.getInitialOffset(subject.getCurrentTime(), list.get(initialPosition));
+            final int initialPosition = Utils.getInitialPositionInList(subject.getNowTime(), list);
+            final float initialOffset = Utils.getInitialOffset(subject.getNowTime(), list.get(initialPosition));
 
             subject.getHandler().post(
                     new Runnable() {
                         @Override
                         public void run() {
                             ((LinearLayoutManager) recyclerView.getLayoutManager())
-                                    .scrollToPositionWithOffset(initialPosition, (int) Utils.convertMillisecondsToPx((long) initialOffset, recyclerView.getContext()));
+                                    .scrollToPositionWithOffset(initialPosition, -(int) Utils.convertMillisecondsToPx((long) initialOffset, recyclerView.getContext()));
                         }
                     }
             );

@@ -48,7 +48,6 @@ public class ObservableRecyclerView extends RecyclerView implements IObservable{
     @Override
     public void reset() {
         int initialPositionInList = Utils.getInitialPositionInList(subject.getCurrentTime(), ((ProgramsAdapter)getAdapter()).getArrayList());
-        int offset = 20;
-        ((LinearLayoutManager) getLayoutManager()).scrollToPositionWithOffset(initialPositionInList, offset);
+        ((LinearLayoutManager) getLayoutManager()).scrollToPositionWithOffset(initialPositionInList, 0);
     }
 }

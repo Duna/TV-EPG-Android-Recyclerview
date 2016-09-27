@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.HeaderChannelsAdapter;
@@ -88,24 +89,30 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar c = Calendar.getInstance();
         nowTime = c.getTimeInMillis();
+        Random rand = new Random();
+        double nowwTime = nowTime + (long) rand.nextInt(hour * 2 + 1);
+        long startTimew = (long) nowwTime - 2 * week;
+        long endTimew = (long) nowwTime + 2 * week;
+
         long startTime = (long) nowTime - 2 * week;
         long endTime = (long) nowTime + 2 * week;
-
-        horizontalList = new ArrayList<>();
-        for (long i = startTime; i <= endTime; ) {
-            ProgramModel programModel = new ProgramModel();
-            programModel.setStartTime(i);
-            i = i + halfHour;
-            programModel.setEndTime(i);
-            programModel.setTitle("Title");
-            programModel.setDescription("Description");
-            programModel.setColorTitle(getResources().getColor(R.color.colorPrimary));
-            programModel.setColorDescription(getResources().getColor(R.color.colorAccent));
-            horizontalList.add(programModel);
-        }
+        subject.setNowTime(nowTime);
 
         verticalList = new ArrayList<>();
-        for (int i = 0; i <= 500; i++) {
+        for (int j = 0; j <= 500; j++) {
+            horizontalList = new ArrayList<>();
+            for (long i = startTimew; i <= endTimew; ) {
+                ProgramModel programModel = new ProgramModel();
+                programModel.setStartTime(i);
+                Random randw = new Random();
+                i = i + fifteenMin + randw.nextInt(hour);
+                programModel.setEndTime(i);
+                programModel.setTitle("Title");
+                programModel.setDescription("Description");
+                programModel.setColorTitle(getResources().getColor(R.color.colorPrimary));
+                programModel.setColorDescription(getResources().getColor(R.color.colorAccent));
+                horizontalList.add(programModel);
+            }
             verticalList.add(horizontalList);
         }
 

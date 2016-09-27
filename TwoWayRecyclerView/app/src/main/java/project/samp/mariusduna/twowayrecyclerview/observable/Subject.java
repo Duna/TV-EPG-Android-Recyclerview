@@ -15,6 +15,7 @@ public class Subject {
     private Handler handler = new Handler();
     private List<ObservableRecyclerView> observers = new ArrayList<ObservableRecyclerView>();
     private double currentTime;
+    private double nowTime; //system time
 
     public Handler getHandler() {
         return handler;
@@ -31,8 +32,6 @@ public class Subject {
 
     public void setState(int dx) {
         this.dx = dx;
-        /*Log.d("POS", "DX position: " + dx);
-        Log.d("POS", "Initial position: " + initialPosition);*/
         this.initialPosition = initialPosition - dx;
         notifyAllObservers();
     }
@@ -62,5 +61,13 @@ public class Subject {
     public void setCurrentTime(double currentTime) {
         this.currentTime = currentTime;
         Log.d("POS", "Current time " + currentTime);
+    }
+
+    public void setNowTime(double time) {
+        nowTime = time;
+    }
+
+    public double getNowTime() {
+        return nowTime;
     }
 }

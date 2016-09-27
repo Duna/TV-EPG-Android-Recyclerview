@@ -19,6 +19,7 @@ import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
  * Created by Marius Duna on 9/15/2016.
  */
 public class Utils {
+    private static final DateFormat hoursFormat = new SimpleDateFormat("hh");
     private static final DateFormat minutesFormat = new SimpleDateFormat("mm");
     private static final DateFormat secondsFormat = new SimpleDateFormat("ss");
 
@@ -56,7 +57,7 @@ public class Utils {
         return TimeUnit.MINUTES.toMillis(1) * px / pxPerMinConstant(context);
     }
 
-    //this will search only 4-5 programs and then return
+    //this will search only 4-5 iterations and then return
     public static int getInitialPositionInList(double currentTime, ArrayList<ProgramModel> arrayList) {
         int half = arrayList.size() / 2;
         if (arrayList.get(half).getStartTime() < (long) currentTime) {
@@ -85,19 +86,20 @@ public class Utils {
         Date date = new Date((long) nowTime);
         long minutes = Integer.parseInt(minutesFormat.format(date));
         if (minutes < 30) {
-            return (int)convertMillisecondsToPx(TimeUnit.MINUTES.toMillis(minutes), ctx);
+            return (int) convertMillisecondsToPx(TimeUnit.MINUTES.toMillis(minutes), ctx);
         } else {
-            return (int)convertMillisecondsToPx(TimeUnit.MINUTES.toMillis(minutes-30), ctx);
+            return (int) convertMillisecondsToPx(TimeUnit.MINUTES.toMillis(minutes - 30), ctx);
         }
     }
 
-    public static float getInitialOffset(double nowTime, ProgramModel program) {
-        Date date1 = new Date((long) nowTime);
-        long minutes1 = Integer.parseInt(minutesFormat.format(date1));
-        long seconds1 = Integer.parseInt(secondsFormat.format(date1));
-        long totalSeconds = TimeUnit.MINUTES.toSeconds(minutes1) + seconds1;
-        long diffProgramStart = TimeUnit.MILLISECONDS.toSeconds(program.getEndTime() - program.getStartTime()) - totalSeconds;
+    public static int getInitialOffset(double time, ProgramModel program) {
+        return 0;
+        /*Date date = new Date((long) time);
+        long minutes = Integer.parseInt(minutesFormat.format(date));
+        long hours = Integer.parseInt(hoursFormat.format(date));
+        long programMinutes = TimeUnit.MILLISECONDS.toMinutes(program.getEndTime() - program.getStartTime());
+
         float diffProgramStartMillis = TimeUnit.SECONDS.toMillis(diffProgramStart);
-        return diffProgramStartMillis;
+        return diffProgramStartMillis;*/
     }
 }

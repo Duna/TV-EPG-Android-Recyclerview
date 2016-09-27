@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
@@ -44,7 +46,12 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     @Override
     public void onBindViewHolder(final ProgramsViewHolder holder, final int position) {
         ProgramModel programModel = horizontalList.get(position);
-        holder.textTitle.setText(programModel.getTitle());
+
+        DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
+        String day = minutesFormat.format(programModel.getStartTime());
+        holder.textTitle.setText(day);
+
+        //holder.textTitle.setText(programModel.getTitle());
         holder.textDescription.setText(programModel.getDescription());
         holder.textTitle.setBackgroundColor(programModel.getColorTitle());
         if (programModel.getStartTime() < System.currentTimeMillis() && System.currentTimeMillis() < programModel.getEndTime()) {
@@ -53,8 +60,8 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
             holder.textDescription.setBackgroundColor(programModel.getColorDescription());
         }
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        int dp = (int) Utils.convertMillisecondsToDp(programModel.getEndTime() - programModel.getStartTime(), holder.textTitle.getContext());
-        layoutParams.width = dp;
+        int px = (int) Utils.convertMillisecondsToPx(programModel.getEndTime() - programModel.getStartTime(), holder.textTitle.getContext());
+        layoutParams.width = px;
         //layoutParams.width = (int) Utils.convertMinutesToDp(180, holder.textTitle.getContext());//(int) Utils.convertMinutesToDp(programModel.getEndTime() - programModel.getStartTime(), holder.textTitle.getContext());
         // holder.itemView.setLayoutParams(layoutParams);
        /* holder.txtView.setOnClickListener(new View.OnClickListener() {
