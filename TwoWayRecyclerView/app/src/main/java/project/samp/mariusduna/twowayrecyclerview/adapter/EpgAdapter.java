@@ -25,8 +25,6 @@ import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
 public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
     private RecyclerView.RecycledViewPool recycledViewPool;
     private ArrayList<ArrayList<ProgramModel>> verticalList;
-    DateFormat minutesFormat = new SimpleDateFormat("mm");
-    DateFormat secondsFormat = new SimpleDateFormat("ss");
     private Subject subject;
 
     public void setSubject(Subject subject) {
@@ -51,29 +49,10 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
             Log.d("POS", "Recycled new view at pos: " + subject.getInitialPosition());
         }
 
-        private float getInitialOffset(ProgramModel program) {
-            Date date1 = new Date((long) subject.getCurrentTime());
-            long minutes1 = Integer.parseInt(minutesFormat.format(date1));
-            long seconds1 = Integer.parseInt(secondsFormat.format(date1));
-            long totalSeconds = TimeUnit.MINUTES.toSeconds(minutes1) + seconds1;
-            long diffProgramStart = TimeUnit.MILLISECONDS.toSeconds(program.getEndTime() - program.getStartTime()) - totalSeconds;
-            float diffProgramStartMillis = TimeUnit.SECONDS.toMillis(diffProgramStart);
-            return diffProgramStartMillis;
-        }
-
-        //TODO optimize idea: migrate to binary search
-        private int getInitialPositionTimeline(ArrayList<ProgramModel> list) {
-            int i = 0;
-            while (subject.getCurrentTime() > list.get(i).getStartTime()) {
-                i++;
-            }
-            return i;
-        }
-
         public void initialScroll() {
             ArrayList<ProgramModel> list = ((ProgramsAdapter) recyclerView.getAdapter()).getArrayList();
-            final int initialPosition = getInitialPositionTimeline(list);
-            final float initialOffset = getInitialOffset(list.get(initialPosition));
+            final int initialPosition = Utils.getInitialPositionInList(subject.getCurrentTime(), list);
+            final float initialOffset = Utils.getInitialOffset(subject.getCurrentTime(), list.get(initialPosition));
 
             subject.getHandler().post(
                     new Runnable() {
@@ -85,7 +64,6 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
                     }
             );
         }
-
     }
 
     public EpgAdapter(ArrayList<ArrayList<ProgramModel>> verticalList) {
@@ -110,7 +88,6 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
     @Override
     public void onBindViewHolder(final EpgViewHolder holder, final int position) {
         holder.setList(verticalList.get(position));
-       /* holder.scrollBy(-subject.getInitialPosition());*/
         holder.initialScroll();
 
         /*holder.txtView.setOnClickListener(new View.OnClickListener() {

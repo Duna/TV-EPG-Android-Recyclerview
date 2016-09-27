@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,7 +47,10 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.Timeli
         Date date = new Date(horizontalList.get(position));
         calendar.setTime(date);
         String str = simpleDateFormat.format(date.getTime());
-        holder.txtView.setText(str);
+
+        DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM");
+        String day = minutesFormat.format(date.getTime());
+        holder.txtView.setText(str + "/" + day);
     }
 
     @Override

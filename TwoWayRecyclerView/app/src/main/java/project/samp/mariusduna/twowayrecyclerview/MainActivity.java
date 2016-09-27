@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.HeaderChannelsAdapter;
@@ -68,22 +67,13 @@ public class MainActivity extends AppCompatActivity {
         nowTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date1 = new Date((long) nowTime);
-                DateFormat minutesFormat = new SimpleDateFormat("mm");
-                DateFormat secondsFormat = new SimpleDateFormat("ss");
-                long minutes1 = Integer.parseInt(minutesFormat.format(date1));
-                long seconds1 = Integer.parseInt(secondsFormat.format(date1));
-                long totalSeconds = TimeUnit.MINUTES.toSeconds(minutes1) + seconds1;
-                //TODO here is a bug
-                long diffProgramStart = TimeUnit.MINUTES.toSeconds(30) - totalSeconds;
-                float diffProgramStartMillis = TimeUnit.SECONDS.toMillis(diffProgramStart);
-
-                subject.setState((int) Utils.convertMillisecondsToPx(diffProgramStartMillis, getApplicationContext()));
+                long offsetStartMillis = Utils.getTimelineOffset(nowTime, getApplicationContext());
+                subject.setState((int) Utils.convertMillisecondsToPx(offsetStartMillis, getApplicationContext()));
                 subject.setCurrentTime(nowTime);
-                //TODO optimize this line
-                epgRecyclerView.setAdapter(epgAdapter);
+                subject.resetAllObservers();
 
-                horizontalLayoutManagaer.scrollToPositionWithOffset(getNowPositionTimeline(), (int) Utils.convertMillisecondsToPx(diffProgramStartMillis, getApplicationContext()));
+                horizontalLayoutManagaer.scrollToPositionWithOffset(Utils.getInitialPositionInTimelineList(subject.getCurrentTime(), timelineList),
+                        (int) Utils.convertMillisecondsToPx(offsetStartMillis, getApplicationContext()));
             }
         });
 
@@ -157,19 +147,10 @@ public class MainActivity extends AppCompatActivity {
         channelsRecyclerView.setLayoutManager(channelsLayoutmanager);
 
         //start set start position for timeline recyclerview
-        Date date1 = new Date((long) nowTime);
-        DateFormat minutesFormat = new SimpleDateFormat("mm");
-        DateFormat secondsFormat = new SimpleDateFormat("ss");
-        long minutes1 = Integer.parseInt(minutesFormat.format(date1));
-        long seconds1 = Integer.parseInt(secondsFormat.format(date1));
-        long totalSeconds = TimeUnit.MINUTES.toSeconds(minutes1) + seconds1;
-        //TODO here is a bug
-        long diffProgramStart = TimeUnit.MINUTES.toSeconds(30) - totalSeconds;
-        float diffProgramStartMillis = TimeUnit.SECONDS.toMillis(diffProgramStart);
-        horizontalLayoutManagaer.scrollToPositionWithOffset(getNowPositionTimeline(), (int) Utils.convertMillisecondsToPx(diffProgramStartMillis, getApplicationContext()));
+        horizontalLayoutManagaer.scrollToPositionWithOffset(Utils.getInitialPositionInTimelineList(nowTime, timelineList), -Utils.getTimelineOffset(nowTime, getApplicationContext()));
+        //getInitialPositionInTimelineList(nowTime, timelineList),0);
+        // (int) Utils.convertMillisecondsToPx(diffProgramStartMillis, getApplicationContext()));
         //end set start position for timeline recyclerview
-
-        subject.setCurrentTime(nowTime);
 
         timelineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -219,14 +200,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         epgRecyclerView.setAdapter(epgAdapter);
-    }
-
-    private int getNowPositionTimeline() {
-        int i = 0;
-        while (nowTime > timelineList.get(i)) {
-            i++;
-        }
-        return i;
     }
 
     @Override

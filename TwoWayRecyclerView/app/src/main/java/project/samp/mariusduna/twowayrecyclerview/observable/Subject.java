@@ -14,7 +14,6 @@ public class Subject {
     private int initialPosition;
     private Handler handler = new Handler();
     private List<ObservableRecyclerView> observers = new ArrayList<ObservableRecyclerView>();
-    private int positionInList;
     private double currentTime;
 
     public Handler getHandler() {
@@ -47,6 +46,12 @@ public class Subject {
     public void notifyAllObservers() {
         for (ObservableRecyclerView observer : observers) {
             observer.update();
+        }
+    }
+
+    public void resetAllObservers() {
+        for (ObservableRecyclerView observer : observers) {
+            observer.reset();
         }
     }
 

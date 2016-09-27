@@ -5,4 +5,5 @@ package project.samp.mariusduna.twowayrecyclerview.observable;
  */
 public interface IObservable {
     void update();
+    void reset();
 }

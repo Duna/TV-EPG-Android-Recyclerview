@@ -2,10 +2,14 @@ package project.samp.mariusduna.twowayrecyclerview.observable;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+
+import project.samp.mariusduna.twowayrecyclerview.adapter.ProgramsAdapter;
+import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
 
 /**
  * Created by Marius Duna on 9/9/2016.
@@ -39,5 +43,12 @@ public class ObservableRecyclerView extends RecyclerView implements IObservable{
     public void update() {
         scrollBy(subject.getState(), 0);
         Log.d("POS", "Item scrolled at: " + subject.getState());
+    }
+
+    @Override
+    public void reset() {
+        int initialPositionInList = Utils.getInitialPositionInList(subject.getCurrentTime(), ((ProgramsAdapter)getAdapter()).getArrayList());
+        int offset = 20;
+        ((LinearLayoutManager) getLayoutManager()).scrollToPositionWithOffset(initialPositionInList, offset);
     }
 }
