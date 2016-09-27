@@ -23,7 +23,7 @@ import java.util.Date;
 import java.util.Random;
 
 import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
-import project.samp.mariusduna.twowayrecyclerview.adapter.HeaderChannelsAdapter;
+import project.samp.mariusduna.twowayrecyclerview.adapter.ChannelsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.TimelineAdapter;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private TimelineAdapter timelineAdapter;
 
     private ArrayList<Uri> headerChannelsList;
-    private HeaderChannelsAdapter channelsAdapter;
+    private ChannelsAdapter channelsAdapter;
     private Subject subject = new Subject();
 
     private LinearLayoutManager horizontalLayoutManagaer;
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 ProgramModel programModel = new ProgramModel();
                 programModel.setStartTime(i);
                 Random randw = new Random();
-                i = i + randw.nextInt(hour);
+                i = i + fifteenMin + randw.nextInt(hour);
                 programModel.setEndTime(i);
                 programModel.setTitle("Title");
                 programModel.setDescription("Description");
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         timelineAdapter = new TimelineAdapter(timelineList);
         timelineRecyclerView.setAdapter(timelineAdapter);
 
-        channelsAdapter = new HeaderChannelsAdapter(headerChannelsList);
+        channelsAdapter = new ChannelsAdapter(headerChannelsList);
         channelsRecyclerView.setAdapter(channelsAdapter);
 
 

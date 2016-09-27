@@ -9,14 +9,13 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
 
 /**
  * Created by Marius Duna on 9/15/2016.
  */
-public class HeaderChannelsAdapter extends RecyclerView.Adapter<HeaderChannelsAdapter.HeaderChannelViewHolder> {
+public class ChannelsAdapter extends RecyclerView.Adapter<ChannelsAdapter.HeaderChannelViewHolder> {
     private List<Uri> horizontalList;
 
     public class HeaderChannelViewHolder extends RecyclerView.ViewHolder {
@@ -28,7 +27,7 @@ public class HeaderChannelsAdapter extends RecyclerView.Adapter<HeaderChannelsAd
         }
     }
 
-    public HeaderChannelsAdapter(ArrayList<Uri> horizontalList) {
+    public ChannelsAdapter(ArrayList<Uri> horizontalList) {
         this.horizontalList = horizontalList;
     }
 

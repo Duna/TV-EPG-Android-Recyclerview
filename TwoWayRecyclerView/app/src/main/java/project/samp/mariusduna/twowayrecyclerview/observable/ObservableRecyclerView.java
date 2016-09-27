@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
 /**
  * Created by Marius Duna on 9/9/2016.
  */
-public class ObservableRecyclerView extends RecyclerView implements IObservable{
+public class ObservableRecyclerView extends RecyclerView implements IObservable {
     protected Subject subject;
 
     public void setSubject(Subject subject) {
@@ -45,19 +44,13 @@ public class ObservableRecyclerView extends RecyclerView implements IObservable{
     @Override
     public void update() {
         scrollBy(subject.getState(), 0);
-        Log.d("POS", "Item scrolled at: " + subject.getState());
     }
 
     @Override
     public void reset() {
-        ArrayList<ProgramModel> list = ((ProgramsAdapter)getAdapter()).getArrayList();
+        ArrayList<ProgramModel> list = ((ProgramsAdapter) getAdapter()).getArrayList();
         final int initialPosition = Utils.getInitialPositionInList(subject.getSystemTime(), list);
         final float initialOffset = Utils.getInitialProgramOffsetPx(list.get(initialPosition).getStartTime(), subject.getSystemTime(), getContext());
-        subject.getHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                ((LinearLayoutManager) getLayoutManager()).scrollToPositionWithOffset(initialPosition, -(int) (initialOffset + subject.getInitialPosition()));
-            }
-        });
+        ((LinearLayoutManager) getLayoutManager()).scrollToPositionWithOffset(initialPosition, -(int) (initialOffset + subject.getInitialPosition()));
     }
 }
