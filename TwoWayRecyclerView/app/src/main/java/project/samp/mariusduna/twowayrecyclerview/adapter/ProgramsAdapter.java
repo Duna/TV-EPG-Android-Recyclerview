@@ -13,13 +13,14 @@ import java.util.ArrayList;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
+import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
 import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
 
 /**
  * Created by Marius Duna on 9/12/2016.
  */
 public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.ProgramsViewHolder> {
-
+    private Subject subject;
     private ArrayList<ProgramModel> horizontalList;
 
     public class ProgramsViewHolder extends RecyclerView.ViewHolder {
@@ -33,8 +34,9 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         }
     }
 
-    public ProgramsAdapter(ArrayList<ProgramModel> horizontalList) {
+    public ProgramsAdapter(ArrayList<ProgramModel> horizontalList, Subject subject) {
         this.horizontalList = horizontalList;
+        this.subject = subject;
     }
 
     @Override
@@ -54,7 +56,7 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         //holder.textTitle.setText(programModel.getTitle());
         holder.textDescription.setText(programModel.getDescription());
         holder.textTitle.setBackgroundColor(programModel.getColorTitle());
-        if (programModel.getStartTime() < System.currentTimeMillis() && System.currentTimeMillis() < programModel.getEndTime()) {
+        if (programModel.getStartTime() < subject.getSystemTime() && subject.getSystemTime() < programModel.getEndTime()) {
             holder.textDescription.setBackgroundColor(ContextCompat.getColor(holder.textTitle.getContext(), android.R.color.black));
         } else {
             holder.textDescription.setBackgroundColor(programModel.getColorDescription());

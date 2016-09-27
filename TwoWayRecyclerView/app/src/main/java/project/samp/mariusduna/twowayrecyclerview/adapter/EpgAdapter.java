@@ -39,7 +39,7 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
         }
 
         public void setList(ArrayList<ProgramModel> horizontalList) {
-            ProgramsAdapter horizontalAdapter = new ProgramsAdapter(horizontalList);
+            ProgramsAdapter horizontalAdapter = new ProgramsAdapter(horizontalList, subject);
             recyclerView.setAdapter(horizontalAdapter);
             recyclerView.setSubject(subject);
             Log.d("POS", "Recycled new view at pos: " + subject.getInitialPosition());
