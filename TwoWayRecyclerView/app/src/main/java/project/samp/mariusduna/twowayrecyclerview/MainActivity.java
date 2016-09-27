@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 subject.setState((int) Utils.convertMillisecondsToPx(offsetStartMillis, getApplicationContext()));
                 subject.setCurrentTime(nowTime);
                 subject.resetAllObservers();
-
-                horizontalLayoutManagaer.scrollToPositionWithOffset(Utils.getInitialPositionInTimelineList(nowTime, timelineList), -Utils.getTimelineOffset(nowTime, getApplicationContext()));
+                int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
+                horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos, -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos), nowTime, getApplicationContext()));
             }
         });
 
@@ -96,10 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
         long startTime = (long) nowTime - 2 * week;
         long endTime = (long) nowTime + 2 * week;
-        subject.setNowTime(nowTime);
+        subject.setSystemTime(nowTime);
 
         verticalList = new ArrayList<>();
-        for (int j = 0; j <= 500; j++) {
+        for (int j = 0; j <= 30; j++) {
             horizontalList = new ArrayList<>();
             for (long i = startTimew; i <= endTimew; ) {
                 ProgramModel programModel = new ProgramModel();
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         headerChannelsList = new ArrayList<>();
-        for (int i = 0; i <= 500; i++) {
+        for (int i = 0; i <= 30; i++) {
             headerChannelsList.add(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
         }
 
@@ -199,7 +199,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         subject.setCurrentTime(nowTime);
-        horizontalLayoutManagaer.scrollToPositionWithOffset(Utils.getInitialPositionInTimelineList(nowTime, timelineList), -Utils.getTimelineOffset(nowTime, getApplicationContext()));
+        int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
+        horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos, -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos), nowTime, getApplicationContext()));
 
         epgRecyclerView.setAdapter(epgAdapter);
     }

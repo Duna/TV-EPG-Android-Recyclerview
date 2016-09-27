@@ -7,11 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
@@ -51,15 +47,14 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
 
         public void initialScroll() {
             ArrayList<ProgramModel> list = ((ProgramsAdapter) recyclerView.getAdapter()).getArrayList();
-            final int initialPosition = Utils.getInitialPositionInList(subject.getNowTime(), list);
-            final float initialOffset = Utils.getInitialOffset(subject.getNowTime(), list.get(initialPosition));
+            final int initialPosition = Utils.getInitialPositionInList(subject.getSystemTime(), list);
+            final float initialOffset = Utils.getInitialProgramOffsetPx(list.get(initialPosition).getStartTime(), subject.getSystemTime(), recyclerView.getContext());
 
             subject.getHandler().post(
                     new Runnable() {
                         @Override
                         public void run() {
-                            ((LinearLayoutManager) recyclerView.getLayoutManager())
-                                    .scrollToPositionWithOffset(initialPosition, -(int) Utils.convertMillisecondsToPx((long) initialOffset, recyclerView.getContext()));
+                            ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(initialPosition, -(int) (initialOffset + subject.getInitialPosition()));
                         }
                     }
             );
