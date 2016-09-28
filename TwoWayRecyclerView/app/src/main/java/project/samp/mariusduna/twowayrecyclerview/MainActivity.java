@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -205,32 +206,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getY() < 350) {
-            super.dispatchTouchEvent(ev);
-            return false;
-        } else {
-            switch (ev.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    mDownY = ev.getY();
-                    mDownX = ev.getX();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    float y = ev.getY();
-                    float yDelta = y - mDownY;
-                    mDownY = y;
+        timelineRecyclerView.dispatchTouchEvent(ev);
+        epgRecyclerView.dispatchTouchEvent(ev);
+        channelsRecyclerView.dispatchTouchEvent(ev);
+        nowTextView.dispatchTouchEvent(ev);
+        return false;
+    }
 
-                    float x = ev.getX();
-                    float xDelta = x - mDownX;
-                    mDownX = x;
-                    //2D movements
-                    epgRecyclerView.scrollBy(0, -(int) yDelta);
-                    channelsRecyclerView.scrollBy(0, -(int) yDelta);
-                    //oX movement
-                    timelineRecyclerView.scrollBy(-(int) xDelta, 0);
-                    break;
-            }
-            return true;
-        }
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        epgRecyclerView.dispatchKeyEvent(event);
+        return super.dispatchKeyEvent(event);
     }
 
     public static final Uri getUriToResource(@NonNull Context context, @AnyRes int resId) throws Resources.NotFoundException {
