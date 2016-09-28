@@ -24,13 +24,13 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
     private ArrayList<ProgramModel> horizontalList;
 
     public class ProgramsViewHolder extends RecyclerView.ViewHolder {
-        public TextView textTitle;
-        public TextView textDescription;
+        public TextView title;
+        public TextView description;
 
         public ProgramsViewHolder(View view) {
             super(view);
-            textTitle = (TextView) view.findViewById(R.id.program_title);
-            textDescription = (TextView) view.findViewById(R.id.program_description);
+            title = (TextView) view.findViewById(R.id.program_title);
+            description = (TextView) view.findViewById(R.id.program_description);
         }
     }
 
@@ -51,20 +51,20 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
 
         DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
         String day = minutesFormat.format(programModel.getStartTime());
-        holder.textTitle.setText(day);
+        holder.title.setText(day);
 
-        //holder.textTitle.setText(programModel.getTitle());
-        holder.textDescription.setText(programModel.getDescription());
-        holder.textTitle.setBackgroundColor(programModel.getColorTitle());
+        //holder.title.setText(programModel.getTitle());
+        holder.description.setText(programModel.getDescription());
+        holder.title.setBackgroundColor(programModel.getColorTitle());
         if (programModel.getStartTime() < subject.getSystemTime() && subject.getSystemTime() < programModel.getEndTime()) {
-            holder.textDescription.setBackgroundColor(ContextCompat.getColor(holder.textTitle.getContext(), android.R.color.black));
+            holder.description.setBackgroundColor(ContextCompat.getColor(holder.title.getContext(), android.R.color.black));
         } else {
-            holder.textDescription.setBackgroundColor(programModel.getColorDescription());
+            holder.description.setBackgroundColor(programModel.getColorDescription());
         }
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        int px = (int) Utils.convertMillisecondsToPx(programModel.getEndTime() - programModel.getStartTime(), holder.textTitle.getContext());
+        int px = (int) Utils.convertMillisecondsToPx(programModel.getEndTime() - programModel.getStartTime(), holder.title.getContext());
         layoutParams.width = px;
-        //layoutParams.width = (int) Utils.convertMinutesToDp(180, holder.textTitle.getContext());//(int) Utils.convertMinutesToDp(programModel.getEndTime() - programModel.getStartTime(), holder.textTitle.getContext());
+        //layoutParams.width = (int) Utils.convertMinutesToDp(180, holder.title.getContext());//(int) Utils.convertMinutesToDp(programModel.getEndTime() - programModel.getStartTime(), holder.title.getContext());
         // holder.itemView.setLayoutParams(layoutParams);
        /* holder.txtView.setOnClickListener(new View.OnClickListener() {
             @Override

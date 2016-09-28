@@ -15,7 +15,7 @@ public class Subject {
     private Handler handler = new Handler();
     private List<ObservableRecyclerView> observers = new ArrayList<ObservableRecyclerView>();
     private double currentTime;
-    private double systemTime; //system time
+    private double systemTime;
 
     public Handler getHandler() {
         return handler;

@@ -3,6 +3,7 @@
     android:layout_width="180dp"
     android:layout_height="@dimen/epg_item_container_height"
     android:background="@android:color/black"
+    android:clickable="true"
     android:orientation="vertical"
     android:paddingBottom="1px"
     android:paddingRight="1px">

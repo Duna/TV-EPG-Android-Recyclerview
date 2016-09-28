@@ -22,8 +22,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.ChannelsAdapter;
+import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.TimelineAdapter;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
@@ -68,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
         nowTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //long offsetStartMillis = Utils.getTimelineOffset(nowTime, getApplicationContext());
-                //subject.setState((int) Utils.convertMillisecondsToPx(offsetStartMillis, getApplicationContext()));
-                //subject.setState(0);
                 subject.setCurrentTime(nowTime);
                 subject.resetAllObservers();
                 int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
@@ -172,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             private void updateNowIndicator() {
-                float positionOnScreen = Utils.convertMillisecondsToPx((float) (nowTime - subject.getCurrentTime()), getApplicationContext());
+                float positionOnScreen = Utils.convertMillisecondsToPx((float) (subject.getSystemTime() - subject.getCurrentTime()), getApplicationContext());
                 if (positionOnScreen + channelsRecyclerView.getWidth() < channelsRecyclerView.getWidth()) {
                     nowVerticalLineView.setVisibility(View.INVISIBLE);
                     nowTextView.setBackgroundResource(R.drawable.ic_now_left);
@@ -225,13 +222,11 @@ public class MainActivity extends AppCompatActivity {
                     float x = ev.getX();
                     float xDelta = x - mDownX;
                     mDownX = x;
-                    //force orthogonal movements
-                    if (Math.abs(yDelta) > Math.abs(xDelta)) {
-                        epgRecyclerView.scrollBy(0, -(int) yDelta);
-                        channelsRecyclerView.scrollBy(0, -(int) yDelta);
-                    } else {
-                        timelineRecyclerView.scrollBy(-(int) xDelta, 0);
-                    }
+                    //2D movements
+                    epgRecyclerView.scrollBy(0, -(int) yDelta);
+                    channelsRecyclerView.scrollBy(0, -(int) yDelta);
+                    //oX movement
+                    timelineRecyclerView.scrollBy(-(int) xDelta, 0);
                     break;
             }
             return true;
