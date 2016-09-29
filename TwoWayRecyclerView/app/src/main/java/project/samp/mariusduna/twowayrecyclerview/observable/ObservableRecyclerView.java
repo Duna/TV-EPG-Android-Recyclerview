@@ -38,7 +38,10 @@ public class ObservableRecyclerView extends RecyclerView implements IObservable 
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        return true;
+        if (MotionEvent.ACTION_MOVE == ev.getAction()){
+            return true;
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override

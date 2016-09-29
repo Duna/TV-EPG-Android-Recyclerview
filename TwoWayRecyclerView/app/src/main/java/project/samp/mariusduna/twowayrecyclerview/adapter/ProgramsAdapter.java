@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,14 +65,12 @@ public class ProgramsAdapter extends RecyclerView.Adapter<ProgramsAdapter.Progra
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         int px = (int) Utils.convertMillisecondsToPx(programModel.getEndTime() - programModel.getStartTime(), holder.title.getContext());
         layoutParams.width = px;
-        //layoutParams.width = (int) Utils.convertMinutesToDp(180, holder.title.getContext());//(int) Utils.convertMinutesToDp(programModel.getEndTime() - programModel.getStartTime(), holder.title.getContext());
-        // holder.itemView.setLayoutParams(layoutParams);
-       /* holder.txtView.setOnClickListener(new View.OnClickListener() {
+        holder.description.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,holder.txtView.getText().toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });
     }
 
     @Override

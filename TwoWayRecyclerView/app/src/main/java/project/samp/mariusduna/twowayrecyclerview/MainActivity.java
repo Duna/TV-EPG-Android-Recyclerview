@@ -3,6 +3,7 @@ package project.samp.mariusduna.twowayrecyclerview;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.AnyRes;
@@ -11,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private View nowVerticalLineView;
     private TextView nowTextView;
 
-    private float mDownX;
-    private float mDownY;
+    private int location[] = new int[2];
     private double nowTime;
     private int screenWidth;
 
@@ -206,17 +205,24 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        timelineRecyclerView.dispatchTouchEvent(ev);
-        epgRecyclerView.dispatchTouchEvent(ev);
-        channelsRecyclerView.dispatchTouchEvent(ev);
-        nowTextView.dispatchTouchEvent(ev);
-        return false;
+        //manual dispatch events to specific view hierarchy
+        dispatchEventForView(ev, timelineRecyclerView);
+        dispatchEventForView(ev, epgRecyclerView);
+        dispatchEventForView(ev, channelsRecyclerView);
+
+        nowTextView.getLocationInWindow(location);
+        Rect editTextRect = new Rect();
+        nowTextView.getHitRect(editTextRect);
+        if (editTextRect.contains((int) ev.getX(), (int) ev.getY() - location[1])) {
+            nowTextView.dispatchTouchEvent(ev);
+        }
+        return true;
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        epgRecyclerView.dispatchKeyEvent(event);
-        return super.dispatchKeyEvent(event);
+    private <T extends View> void dispatchEventForView(MotionEvent ev, T genericView) {
+        genericView.getLocationInWindow(location);
+        MotionEvent motionEvent = MotionEvent.obtain(ev.getDownTime(), ev.getEventTime(), ev.getAction(), ev.getX() - location[0], ev.getY() - location[1], ev.getMetaState());
+        genericView.dispatchTouchEvent(motionEvent);
     }
 
     public static final Uri getUriToResource(@NonNull Context context, @AnyRes int resId) throws Resources.NotFoundException {
