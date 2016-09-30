@@ -2,7 +2,6 @@ package project.samp.mariusduna.twowayrecyclerview.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
-import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
+import project.samp.mariusduna.twowayrecyclerview.model.BaseProgramModel;
 
 /**
  * Created by Marius Duna on 9/15/2016.
@@ -34,8 +33,8 @@ public class Utils {
         return TimeUnit.MINUTES.toMillis(1) * px / pxPerMinConstant(context);
     }
 
-    public static int getInitialPositionInList(double currentTime, ArrayList<ProgramModel> arrayList) {
-        ProgramModel programModel = new ProgramModel();
+    public static int getInitialPositionInList(double currentTime, ArrayList<BaseProgramModel> arrayList) {
+        BaseProgramModel programModel = new BaseProgramModel();
         programModel.setStartTime((long) currentTime);
         int pos = Collections.binarySearch(arrayList, programModel, comparator);
         //TODO handle the situation when the list has less than 2 items
@@ -43,8 +42,8 @@ public class Utils {
         return pos;
     }
 
-    private static Comparator<ProgramModel> comparator = new Comparator<ProgramModel>() {
-        public int compare(ProgramModel u1, ProgramModel u2) {
+    private static Comparator<BaseProgramModel> comparator = new Comparator<BaseProgramModel>() {
+        public int compare(BaseProgramModel u1, BaseProgramModel u2) {
             return (int) (u1.getStartTime() - u2.getStartTime());
         }
     };

@@ -5,10 +5,12 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import project.samp.mariusduna.twowayrecyclerview.model.BaseProgramModel;
+
 /**
  * Created by Marius Duna on 9/12/2016.
  */
-public abstract class GenericProgramsAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class GenericProgramsAdapter<T extends BaseProgramModel> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<T> listItems;
 
     public abstract RecyclerView.ViewHolder setViewHolder(ViewGroup parent);

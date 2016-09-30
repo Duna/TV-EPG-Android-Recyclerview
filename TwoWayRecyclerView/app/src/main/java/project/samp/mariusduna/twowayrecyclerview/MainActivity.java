@@ -8,12 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.AnyRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -25,7 +28,9 @@ import java.util.Random;
 
 import project.samp.mariusduna.twowayrecyclerview.adapter.ChannelsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
+import project.samp.mariusduna.twowayrecyclerview.adapter.GenericProgramsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.TimelineAdapter;
+import project.samp.mariusduna.twowayrecyclerview.model.BaseProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
 import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
@@ -52,6 +57,17 @@ public class MainActivity extends AppCompatActivity {
     private int location[] = new int[2];
     private double nowTime;
     private int screenWidth;
+
+    private class ProgramsViewHolder extends RecyclerView.ViewHolder {
+        public TextView title;
+        public TextView description;
+
+        public ProgramsViewHolder(View itemView) {
+            super(itemView);
+            title = (TextView) itemView.findViewById(R.id.program_title);
+            description = (TextView) itemView.findViewById(R.id.program_description);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +149,40 @@ public class MainActivity extends AppCompatActivity {
             headerChannelsList.add(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
         }
 
-        epgAdapter = new EpgAdapter(verticalList);
+        epgAdapter = new EpgAdapter(verticalList) {
+            @Override
+            public GenericProgramsAdapter programsCreator(ArrayList programList, final Subject subject) {
+                return new GenericProgramsAdapter(programList) {
+                    @Override
+                    public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.program_item, parent, false);
+                        ProgramsViewHolder viewHolder = new ProgramsViewHolder(itemView);
+                        return viewHolder;
+                    }
+
+                    @Override
+                    public void onBindData(RecyclerView.ViewHolder holder, final int position) {
+                        ProgramModel programModel = (ProgramModel) getItem(position);
+
+                        DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
+                        String day = minutesFormat.format(programModel.getStartTime());
+                        final ProgramsViewHolder myHolder = (ProgramsViewHolder) holder;
+                        myHolder.title.setText(day);
+
+                        myHolder.description.setText(programModel.getDescription());
+                        myHolder.title.setBackgroundColor(programModel.getColorTitle());
+                        if (programModel.getStartTime() < subject.getSystemTime() && subject.getSystemTime() < programModel.getEndTime()) {
+                            myHolder.description.setBackgroundColor(ContextCompat.getColor(myHolder.title.getContext(), android.R.color.black));
+                        } else {
+                            myHolder.description.setBackgroundColor(programModel.getColorDescription());
+                        }
+                        ViewGroup.LayoutParams layoutParams = myHolder.itemView.getLayoutParams();
+                        int px = (int) Utils.convertMillisecondsToPx(programModel.getEndTime() - programModel.getStartTime(), myHolder.title.getContext());
+                        layoutParams.width = px;
+                    }
+                };
+            }
+        };
         epgAdapter.setSubject(subject);
 
         timelineAdapter = new TimelineAdapter(timelineList);
