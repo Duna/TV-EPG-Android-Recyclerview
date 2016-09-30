@@ -1,12 +1,18 @@
 package project.samp.mariusduna.twowayrecyclerview.adapter;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
@@ -30,6 +36,30 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
     public class EpgViewHolder extends RecyclerView.ViewHolder {
         private ObservableRecyclerView recyclerView;
 
+        private class ProgramsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener {
+            public TextView title;
+            public TextView description;
+            public GenericProgramsAdapter.OnRecyclerItemClicked onRecyclerItemClicked;
+
+            public ProgramsViewHolder(View itemView, final GenericProgramsAdapter.OnRecyclerItemClicked onRecyclerItemClicked) {
+                super(itemView);
+                title = (TextView) itemView.findViewById(R.id.program_title);
+                description = (TextView) itemView.findViewById(R.id.program_description);
+                this.onRecyclerItemClicked = onRecyclerItemClicked;
+            }
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                onRecyclerItemClicked.onItemClicked(v, getAdapterPosition());
+                return false;
+            }
+
+            @Override
+            public void onClick(View v) {
+                onRecyclerItemClicked.onItemClicked(v, getAdapterPosition());
+            }
+        }
+
         public EpgViewHolder(View view) {
             super(view);
             recyclerView = (ObservableRecyclerView) view.findViewById(R.id.horizontal_recycler_view);
@@ -39,14 +69,53 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
         }
 
         public void setList(ArrayList<ProgramModel> horizontalList) {
-            ProgramsAdapter horizontalAdapter = new ProgramsAdapter(horizontalList, subject);
+            GenericProgramsAdapter horizontalAdapter = new GenericProgramsAdapter(horizontalList) {
+                @Override
+                public RecyclerView.ViewHolder setViewHolder(ViewGroup parent, OnRecyclerItemClicked onRecyclerItemClicked) {
+                    View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.program_item, parent, false);
+                    ProgramsViewHolder viewHolder = new ProgramsViewHolder(itemView, onRecyclerItemClicked);
+                    return viewHolder;
+                }
+
+                @Override
+                public void onBindData(RecyclerView.ViewHolder holder, final int position) {
+                    ProgramModel programModel = (ProgramModel) getItem(position);
+
+                    DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
+                    String day = minutesFormat.format(programModel.getStartTime());
+                    final ProgramsViewHolder myHolder = (ProgramsViewHolder) holder;
+                    myHolder.title.setText(day);
+
+                    //holder.title.setText(programModel.getTitle());
+                    myHolder.description.setText(programModel.getDescription());
+                    myHolder.title.setBackgroundColor(programModel.getColorTitle());
+                    if (programModel.getStartTime() < subject.getSystemTime() && subject.getSystemTime() < programModel.getEndTime()) {
+                        myHolder.description.setBackgroundColor(ContextCompat.getColor(myHolder.title.getContext(), android.R.color.black));
+                    } else {
+                        myHolder.description.setBackgroundColor(programModel.getColorDescription());
+                    }
+                    ViewGroup.LayoutParams layoutParams = myHolder.itemView.getLayoutParams();
+                    int px = (int) Utils.convertMillisecondsToPx(programModel.getEndTime() - programModel.getStartTime(), myHolder.title.getContext());
+                    layoutParams.width = px;
+                }
+
+                @Override
+                public OnRecyclerItemClicked onGetRecyclerItemClickListener() {
+                    return new OnRecyclerItemClicked() {
+                        @Override
+                        public void onItemClicked(View view, int position) {
+                            Toast.makeText(view.getContext(), "Object position:" + position, Toast.LENGTH_SHORT).show();
+                        }
+                    };
+                }
+            };
             recyclerView.setAdapter(horizontalAdapter);
             recyclerView.setSubject(subject);
             Log.d("POS", "Recycled new view at pos: " + subject.getInitialPosition());
         }
 
         public void initialScroll() {
-            ArrayList<ProgramModel> list = ((ProgramsAdapter) recyclerView.getAdapter()).getArrayList();
+            ArrayList<ProgramModel> list = ((GenericProgramsAdapter) recyclerView.getAdapter()).getArrayList();
             final int initialPosition = Utils.getInitialPositionInList(subject.getSystemTime(), list);
             final float initialOffset = Utils.getInitialProgramOffsetPx(list.get(initialPosition).getStartTime(), subject.getSystemTime(), recyclerView.getContext());
             ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(initialPosition, -(int) (initialOffset + subject.getInitialPosition()));

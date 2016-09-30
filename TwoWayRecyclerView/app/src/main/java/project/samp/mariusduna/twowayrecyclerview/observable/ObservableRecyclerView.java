@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
-import project.samp.mariusduna.twowayrecyclerview.adapter.ProgramsAdapter;
+import project.samp.mariusduna.twowayrecyclerview.adapter.GenericProgramsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
 
@@ -51,7 +51,7 @@ public class ObservableRecyclerView extends RecyclerView implements IObservable 
 
     @Override
     public void reset() {
-        ArrayList<ProgramModel> list = ((ProgramsAdapter) getAdapter()).getArrayList();
+        ArrayList<ProgramModel> list = ((GenericProgramsAdapter) getAdapter()).getArrayList();
         final int initialPosition = Utils.getInitialPositionInList(subject.getSystemTime(), list);
         final float initialOffset = Utils.getInitialProgramOffsetPx(list.get(initialPosition).getStartTime(), subject.getSystemTime(), getContext());
         ((LinearLayoutManager) getLayoutManager()).scrollToPositionWithOffset(initialPosition, -(int) (initialOffset + subject.getInitialPosition()));
