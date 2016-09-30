@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
 import project.samp.mariusduna.twowayrecyclerview.model.BaseProgramModel;
+import project.samp.mariusduna.twowayrecyclerview.model.TimelineModel;
 
 /**
  * Created by Marius Duna on 9/15/2016.
@@ -36,23 +37,31 @@ public class Utils {
     public static int getInitialPositionInList(double currentTime, ArrayList<BaseProgramModel> arrayList) {
         BaseProgramModel programModel = new BaseProgramModel();
         programModel.setStartTime((long) currentTime);
-        int pos = Collections.binarySearch(arrayList, programModel, comparator);
+        int pos = Collections.binarySearch(arrayList, programModel, comparatorProgram);
         //TODO handle the situation when the list has less than 2 items
         if (pos < 0) pos = Math.abs(pos) - 2;
         return pos;
     }
 
-    private static Comparator<BaseProgramModel> comparator = new Comparator<BaseProgramModel>() {
+    private static Comparator<BaseProgramModel> comparatorProgram = new Comparator<BaseProgramModel>() {
         public int compare(BaseProgramModel u1, BaseProgramModel u2) {
             return (int) (u1.getStartTime() - u2.getStartTime());
         }
     };
 
-    public static int getInitialPositionInTimelineList(double currentTime, ArrayList<Long> arrayList) {
-        int pos = Collections.binarySearch(arrayList, (long) currentTime);
+    public static int getInitialPositionInTimelineList(double currentTime, ArrayList<TimelineModel> arrayList) {
+        TimelineModel timelineModel = new TimelineModel();
+        timelineModel.setTime((long) currentTime);
+        int pos = Collections.binarySearch(arrayList, timelineModel, comparatorTime);
         if (pos < 0) pos = Math.abs(pos) - 2;
         return pos;
     }
+
+    private static Comparator<TimelineModel> comparatorTime = new Comparator<TimelineModel>() {
+        public int compare(TimelineModel u1, TimelineModel u2) {
+            return (int) (u1.getTime() - u2.getTime());
+        }
+    };
 
     public static int getInitialProgramOffsetPx(double programStartTime, double systemTime, Context context) {
         double offsetTime = systemTime - programStartTime;

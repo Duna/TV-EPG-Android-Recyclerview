@@ -30,9 +30,10 @@ import java.util.Random;
 import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.GenericChannelsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.GenericProgramsAdapter;
-import project.samp.mariusduna.twowayrecyclerview.adapter.TimelineAdapter;
+import project.samp.mariusduna.twowayrecyclerview.adapter.GenericTimelineAdapter;
 import project.samp.mariusduna.twowayrecyclerview.model.ChannelModel;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
+import project.samp.mariusduna.twowayrecyclerview.model.TimelineModel;
 import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
 import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
 
@@ -41,14 +42,17 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView timelineRecyclerView;
     private RecyclerView channelsRecyclerView;
     private ArrayList<ProgramModel> horizontalList;
-    private ArrayList<Long> timelineList;
+    private ArrayList<TimelineModel> timelineList;
     private ArrayList<ArrayList<ProgramModel>> verticalList;
     private EpgAdapter epgAdapter;
-    private TimelineAdapter timelineAdapter;
+    private GenericTimelineAdapter genericTimelineAdapter;
 
     private ArrayList<ChannelModel> headerChannelsList;
     private GenericChannelsAdapter channelsAdapter;
     private Subject subject = new Subject();
+
+    private Calendar calendar = Calendar.getInstance();
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
     private LinearLayoutManager horizontalLayoutManagaer;
     private TextView currentTimeTextView;
@@ -79,6 +83,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public class TimelineViewHolder extends RecyclerView.ViewHolder {
+        public TextView timeView;
+
+        public TimelineViewHolder(View view) {
+            super(view);
+            timeView = (TextView) view.findViewById(R.id.text_timeline);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +110,8 @@ public class MainActivity extends AppCompatActivity {
                 subject.setCurrentTime(nowTime);
                 subject.resetAllObservers();
                 int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
-                horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos, -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos), nowTime, getApplicationContext()));
+                horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
+                        -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos).getTime(), nowTime, getApplicationContext()));
             }
         });
 
@@ -141,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         timelineList = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
         Date date = new Date(startTime);
         calendar.setTime(date);
         int minutes = calendar.get(Calendar.MINUTE);
@@ -150,7 +163,9 @@ public class MainActivity extends AppCompatActivity {
         startTime = startTime + diff * 60000;
 
         for (long i = startTime; i <= endTime; ) {
-            timelineList.add(i);
+            TimelineModel timelineModel = new TimelineModel();
+            timelineModel.setTime(i);
+            timelineList.add(timelineModel);
             i = i + halfHour;
         }
 
@@ -196,8 +211,28 @@ public class MainActivity extends AppCompatActivity {
         };
         epgAdapter.setSubject(subject);
 
-        timelineAdapter = new TimelineAdapter(timelineList);
-        timelineRecyclerView.setAdapter(timelineAdapter);
+        genericTimelineAdapter = new GenericTimelineAdapter(timelineList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.timeline_item, parent, false);
+                return new TimelineViewHolder(itemView);
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, int position) {
+                TimelineModel timelineModel = (TimelineModel) getItem(position);
+                TimelineViewHolder myHolder = (TimelineViewHolder) holder;
+
+                Date date = new Date(timelineModel.getTime());
+                calendar.setTime(date);
+                String str = simpleDateFormat.format(date.getTime());
+
+                DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM");
+                String day = minutesFormat.format(date.getTime());
+                myHolder.timeView.setText(str + "/" + day);
+            }
+        };
+        timelineRecyclerView.setAdapter(genericTimelineAdapter);
 
         channelsAdapter = new GenericChannelsAdapter(headerChannelsList) {
             @Override
@@ -271,7 +306,8 @@ public class MainActivity extends AppCompatActivity {
         });
         subject.setCurrentTime(nowTime);
         int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
-        horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos, -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos), nowTime, getApplicationContext()));
+        horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
+                -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos).getTime(), nowTime, getApplicationContext()));
 
         epgRecyclerView.setAdapter(epgAdapter);
     }
