@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
+import project.samp.mariusduna.twowayrecyclerview.listener.RecyclerItemClickListener;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.observable.ObservableRecyclerView;
 import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
@@ -36,27 +37,14 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
     public class EpgViewHolder extends RecyclerView.ViewHolder {
         private ObservableRecyclerView recyclerView;
 
-        private class ProgramsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener {
+        private class ProgramsViewHolder extends RecyclerView.ViewHolder {
             public TextView title;
             public TextView description;
-            public GenericProgramsAdapter.OnRecyclerItemClicked onRecyclerItemClicked;
 
-            public ProgramsViewHolder(View itemView, final GenericProgramsAdapter.OnRecyclerItemClicked onRecyclerItemClicked) {
+            public ProgramsViewHolder(View itemView) {
                 super(itemView);
                 title = (TextView) itemView.findViewById(R.id.program_title);
                 description = (TextView) itemView.findViewById(R.id.program_description);
-                this.onRecyclerItemClicked = onRecyclerItemClicked;
-            }
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                onRecyclerItemClicked.onItemClicked(v, getAdapterPosition());
-                return false;
-            }
-
-            @Override
-            public void onClick(View v) {
-                onRecyclerItemClicked.onItemClicked(v, getAdapterPosition());
             }
         }
 
@@ -66,14 +54,20 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
             recyclerView.setSubject(subject);
             LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(horizontalLayoutManager);
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(recyclerView.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Toast.makeText(recyclerView.getContext(), "Position: " +  position, Toast.LENGTH_SHORT).show();
+                }
+            }));
         }
 
         public void setList(ArrayList<ProgramModel> horizontalList) {
             GenericProgramsAdapter horizontalAdapter = new GenericProgramsAdapter(horizontalList) {
                 @Override
-                public RecyclerView.ViewHolder setViewHolder(ViewGroup parent, OnRecyclerItemClicked onRecyclerItemClicked) {
+                public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
                     View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.program_item, parent, false);
-                    ProgramsViewHolder viewHolder = new ProgramsViewHolder(itemView, onRecyclerItemClicked);
+                    ProgramsViewHolder viewHolder = new ProgramsViewHolder(itemView);
                     return viewHolder;
                 }
 
@@ -98,17 +92,8 @@ public class EpgAdapter extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
                     int px = (int) Utils.convertMillisecondsToPx(programModel.getEndTime() - programModel.getStartTime(), myHolder.title.getContext());
                     layoutParams.width = px;
                 }
-
-                @Override
-                public OnRecyclerItemClicked onGetRecyclerItemClickListener() {
-                    return new OnRecyclerItemClicked() {
-                        @Override
-                        public void onItemClicked(View view, int position) {
-                            Toast.makeText(view.getContext(), "Object position:" + position, Toast.LENGTH_SHORT).show();
-                        }
-                    };
-                }
             };
+
             recyclerView.setAdapter(horizontalAdapter);
             recyclerView.setSubject(subject);
             Log.d("POS", "Recycled new view at pos: " + subject.getInitialPosition());

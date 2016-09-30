@@ -1,7 +1,6 @@
 package project.samp.mariusduna.twowayrecyclerview.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -11,22 +10,18 @@ import java.util.ArrayList;
  */
 public abstract class GenericProgramsAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<T> listItems;
-    private OnRecyclerItemClicked onRecyclerItemClicked;
 
-    public abstract RecyclerView.ViewHolder setViewHolder(ViewGroup parent, OnRecyclerItemClicked onRecyclerItemClicked);
+    public abstract RecyclerView.ViewHolder setViewHolder(ViewGroup parent);
 
     public abstract void onBindData(RecyclerView.ViewHolder holder, int position);
 
-    public abstract OnRecyclerItemClicked onGetRecyclerItemClickListener();
-
     public GenericProgramsAdapter(ArrayList<T> listItems) {
         this.listItems = listItems;
-        onRecyclerItemClicked = onGetRecyclerItemClickListener();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder holder = setViewHolder(parent, onRecyclerItemClicked);
+        RecyclerView.ViewHolder holder = setViewHolder(parent);
         return holder;
     }
 
@@ -51,9 +46,5 @@ public abstract class GenericProgramsAdapter<T> extends RecyclerView.Adapter<Rec
 
     public T getItem(int position) {
         return listItems.get(position);
-    }
-
-    public interface OnRecyclerItemClicked {
-        void onItemClicked(View view, int position);
     }
 }
