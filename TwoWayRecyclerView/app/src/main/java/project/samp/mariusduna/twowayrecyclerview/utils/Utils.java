@@ -17,6 +17,8 @@ import project.samp.mariusduna.twowayrecyclerview.model.TimelineModel;
  * Created by Marius Duna on 9/15/2016.
  */
 public class Utils {
+    private static BaseProgramModel programModel = new BaseProgramModel();
+    private static TimelineModel timelineModel = new TimelineModel();
     private static float pxPerMinConstant(Context context) {
         return convertDpToPixel(context.getResources().getDimension(R.dimen.epg_width_one_min), context);
     }
@@ -35,7 +37,6 @@ public class Utils {
     }
 
     public static int getInitialPositionInList(double currentTime, ArrayList<BaseProgramModel> arrayList) {
-        BaseProgramModel programModel = new BaseProgramModel();
         programModel.setStartTime((long) currentTime);
         int pos = Collections.binarySearch(arrayList, programModel, comparatorProgram);
         //TODO handle the situation when the list has less than 2 items
@@ -50,9 +51,9 @@ public class Utils {
     };
 
     public static int getInitialPositionInTimelineList(double currentTime, ArrayList<TimelineModel> arrayList) {
-        TimelineModel timelineModel = new TimelineModel();
         timelineModel.setTime((long) currentTime);
         int pos = Collections.binarySearch(arrayList, timelineModel, comparatorTime);
+        //TODO handle the situation when the list has less than 2 items
         if (pos < 0) pos = Math.abs(pos) - 2;
         return pos;
     }

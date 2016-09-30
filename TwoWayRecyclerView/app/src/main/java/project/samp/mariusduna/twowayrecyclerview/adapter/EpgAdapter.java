@@ -20,16 +20,16 @@ import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
 /**
  * Created by Marius Duna on 9/9/2016.
  */
-public abstract class EpgAdapter<U extends BaseProgramModel> extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
+public abstract class EpgAdapter<T extends BaseProgramModel> extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
     private RecyclerView.RecycledViewPool recycledViewPool;
-    private ArrayList<ArrayList<U>> channelsList;
+    private ArrayList<ArrayList<T>> channelsList;
     private Subject subject;
 
     public void setSubject(Subject subject) {
         this.subject = subject;
     }
 
-    public class EpgViewHolder<S extends BaseProgramModel> extends RecyclerView.ViewHolder {
+    public class EpgViewHolder<T extends BaseProgramModel> extends RecyclerView.ViewHolder {
         private ObservableRecyclerView recyclerView;
 
         public EpgViewHolder(View view) {
@@ -41,12 +41,12 @@ public abstract class EpgAdapter<U extends BaseProgramModel> extends RecyclerVie
             recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(recyclerView.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                    Toast.makeText(recyclerView.getContext(), "Position: " + position, Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(recyclerView.getContext(), "Position: " + position, Toast.LENGTH_SHORT).show();
                 }
             }));
         }
 
-        public void setList(ArrayList<S> horizontalList) {
+        public void setList(ArrayList<T> horizontalList) {
             GenericProgramsAdapter horizontalAdapter = programsCreator(horizontalList, subject);
             recyclerView.setAdapter(horizontalAdapter);
             recyclerView.setSubject(subject);
@@ -61,10 +61,10 @@ public abstract class EpgAdapter<U extends BaseProgramModel> extends RecyclerVie
         }
     }
 
-    public EpgAdapter(ArrayList<ArrayList<U>> verticalList) {
+    public EpgAdapter(ArrayList<ArrayList<T>> verticalList) {
         this.channelsList = verticalList;
         recycledViewPool = new RecyclerView.RecycledViewPool();
-        recycledViewPool.setMaxRecycledViews(R.layout.vrecycler_view_item, 25);
+        recycledViewPool.setMaxRecycledViews(R.layout.vrecycler_view_item, 20);
     }
 
     @Override
