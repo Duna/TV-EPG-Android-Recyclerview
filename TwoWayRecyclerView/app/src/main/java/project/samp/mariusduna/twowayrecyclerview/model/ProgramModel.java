@@ -3,7 +3,7 @@ package project.samp.mariusduna.twowayrecyclerview.model;
 /**
  * Created by Marius Duna on 9/15/2016.
  */
-public class ProgramModel extends BaseProgramModel{
+public class ProgramModel extends BaseProgramModel {
     private String title;
     private String description;
     private int colorTitle;

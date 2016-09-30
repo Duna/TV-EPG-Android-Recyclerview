@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -26,11 +27,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import project.samp.mariusduna.twowayrecyclerview.adapter.ChannelsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.EpgAdapter;
+import project.samp.mariusduna.twowayrecyclerview.adapter.GenericChannelsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.GenericProgramsAdapter;
 import project.samp.mariusduna.twowayrecyclerview.adapter.TimelineAdapter;
-import project.samp.mariusduna.twowayrecyclerview.model.BaseProgramModel;
+import project.samp.mariusduna.twowayrecyclerview.model.ChannelModel;
 import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
 import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
@@ -45,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private EpgAdapter epgAdapter;
     private TimelineAdapter timelineAdapter;
 
-    private ArrayList<Uri> headerChannelsList;
-    private ChannelsAdapter channelsAdapter;
+    private ArrayList<ChannelModel> headerChannelsList;
+    private GenericChannelsAdapter channelsAdapter;
     private Subject subject = new Subject();
 
     private LinearLayoutManager horizontalLayoutManagaer;
@@ -66,6 +67,15 @@ public class MainActivity extends AppCompatActivity {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.program_title);
             description = (TextView) itemView.findViewById(R.id.program_description);
+        }
+    }
+
+    public class HeaderChannelViewHolder extends RecyclerView.ViewHolder {
+        public ImageView channelLogo;
+
+        public HeaderChannelViewHolder(View view) {
+            super(view);
+            channelLogo = (ImageView) view.findViewById(R.id.channel_logo);
         }
     }
 
@@ -146,7 +156,9 @@ public class MainActivity extends AppCompatActivity {
 
         headerChannelsList = new ArrayList<>();
         for (int i = 0; i <= 30; i++) {
-            headerChannelsList.add(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
+            ChannelModel channelModel = new ChannelModel();
+            channelModel.setUri(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
+            headerChannelsList.add(channelModel);
         }
 
         epgAdapter = new EpgAdapter(verticalList) {
@@ -156,8 +168,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
                         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.program_item, parent, false);
-                        ProgramsViewHolder viewHolder = new ProgramsViewHolder(itemView);
-                        return viewHolder;
+                        return new ProgramsViewHolder(itemView);
                     }
 
                     @Override
@@ -166,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
                         DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
                         String day = minutesFormat.format(programModel.getStartTime());
-                        final ProgramsViewHolder myHolder = (ProgramsViewHolder) holder;
+                        ProgramsViewHolder myHolder = (ProgramsViewHolder) holder;
                         myHolder.title.setText(day);
 
                         myHolder.description.setText(programModel.getDescription());
@@ -188,7 +199,20 @@ public class MainActivity extends AppCompatActivity {
         timelineAdapter = new TimelineAdapter(timelineList);
         timelineRecyclerView.setAdapter(timelineAdapter);
 
-        channelsAdapter = new ChannelsAdapter(headerChannelsList);
+        channelsAdapter = new GenericChannelsAdapter(headerChannelsList) {
+            @Override
+            public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
+                View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.channels_header_item, parent, false);
+                return new HeaderChannelViewHolder(itemView);
+            }
+
+            @Override
+            public void onBindData(RecyclerView.ViewHolder holder, int position) {
+                ChannelModel programModel = (ChannelModel) getItem(position);
+                HeaderChannelViewHolder myHolder = (HeaderChannelViewHolder) holder;
+                myHolder.channelLogo.setImageURI(programModel.getUri());
+            }
+        };
         channelsRecyclerView.setAdapter(channelsAdapter);
 
 
