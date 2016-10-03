@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
     private DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
 
-    private double nowTime;
-
     private EPGView epgView;
 
     @Override
@@ -117,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                 myHolder.timeView.setText(str + "/" + day);
             }
         };
-        epgView.setTimelineAdapter(genericTimelineAdapter);
 
         channelsAdapter = new GenericChannelsAdapter(headerChannelsList) {
             @Override
@@ -134,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        epgView.setTimelineAdapter(genericTimelineAdapter);
         epgView.setChannelsAdapter(channelsAdapter);
         epgView.setEpgAdapter(epgAdapter);
     }
@@ -154,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         long day = hour * 24;
         long week = day * 7;
 
-        nowTime = calendar.getTimeInMillis();
+        double nowTime = calendar.getTimeInMillis();
 
         //generate EPG for -2 weeks and +2 weeks
         long startTime = (long) nowTime - 2 * week;
