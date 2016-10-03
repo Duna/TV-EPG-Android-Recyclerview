@@ -60,61 +60,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         epgView = (EPGView) findViewById(R.id.epg);
-
-        int hour = 3600000;
-        int halfHour = hour / 2;
-        int fifteenMin = hour / 4;
-        int day = hour * 24;
-        int week = day * 7;
-
-        nowTime = calendar.getTimeInMillis();
-        Random rand = new Random();
-        double nowwTime = nowTime + (long) rand.nextInt(hour * 2 + 1);
-        long startTimew = (long) nowwTime - 2 * week;
-        long endTimew = (long) nowwTime + 2 * week;
-
-        long startTime = (long) nowTime - 2 * week;
-        long endTime = (long) nowTime + 2 * week;
-
-        verticalList = new ArrayList<>();
-        for (int j = 0; j <= 100; j++) {
-            horizontalList = new ArrayList<>();
-            for (long i = startTimew; i <= endTimew; ) {
-                ProgramModel programModel = new ProgramModel();
-                programModel.setStartTime(i);
-                Random randw = new Random();
-                i = i + fifteenMin + randw.nextInt(hour);
-                programModel.setEndTime(i);
-                programModel.setTitle("Title");
-                programModel.setDescription("Description");
-                programModel.setColorTitle(getResources().getColor(R.color.colorPrimary));
-                programModel.setColorDescription(getResources().getColor(R.color.colorAccent));
-                horizontalList.add(programModel);
-            }
-            verticalList.add(horizontalList);
-        }
-
-        timelineList = new ArrayList<>();
-        Date date = new Date(startTime);
-        calendar.setTime(date);
-        int minutes = calendar.get(Calendar.MINUTE);
-        int diff = 60 - minutes;
-        //have only precise time from half and half an hour
-        startTime = startTime + diff * 60000;
-
-        for (long i = startTime; i <= endTime; ) {
-            TimelineModel timelineModel = new TimelineModel();
-            timelineModel.setTime(i);
-            timelineList.add(timelineModel);
-            i = i + halfHour;
-        }
-
-        headerChannelsList = new ArrayList<>();
-        for (int i = 0; i <= 100; i++) {
-            ChannelModel channelModel = new ChannelModel();
-            channelModel.setUri(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
-            headerChannelsList.add(channelModel);
-        }
+        createDummyData();
 
         epgAdapter = new GenericEpgAdapter(verticalList) {
             @Override
@@ -199,5 +145,62 @@ public class MainActivity extends AppCompatActivity {
                 + '/' + res.getResourceTypeName(resId)
                 + '/' + res.getResourceEntryName(resId));
         return resUri;
+    }
+
+    private void createDummyData(){
+        int hour = 3600000;
+        int halfHour = hour / 2;
+        int fifteenMin = hour / 4;
+        int day = hour * 24;
+        int week = day * 7;
+
+        nowTime = calendar.getTimeInMillis();
+        Random rand = new Random();
+        double nowwTime = nowTime + (long) rand.nextInt(hour * 2 + 1);
+        long startTimew = (long) nowwTime - 2 * week;
+        long endTimew = (long) nowwTime + 2 * week;
+
+        long startTime = (long) nowTime - 2 * week;
+        long endTime = (long) nowTime + 2 * week;
+
+        verticalList = new ArrayList<>();
+        for (int j = 0; j <= 100; j++) {
+            horizontalList = new ArrayList<>();
+            for (long i = startTimew; i <= endTimew; ) {
+                ProgramModel programModel = new ProgramModel();
+                programModel.setStartTime(i);
+                Random randw = new Random();
+                i = i + fifteenMin + randw.nextInt(hour);
+                programModel.setEndTime(i);
+                programModel.setTitle("Title");
+                programModel.setDescription("Description");
+                programModel.setColorTitle(getResources().getColor(R.color.colorPrimary));
+                programModel.setColorDescription(getResources().getColor(R.color.colorAccent));
+                horizontalList.add(programModel);
+            }
+            verticalList.add(horizontalList);
+        }
+
+        timelineList = new ArrayList<>();
+        Date date = new Date(startTime);
+        calendar.setTime(date);
+        int minutes = calendar.get(Calendar.MINUTE);
+        int diff = 60 - minutes;
+        //have only precise time from half and half an hour
+        startTime = startTime + diff * 60000;
+
+        for (long i = startTime; i <= endTime; ) {
+            TimelineModel timelineModel = new TimelineModel();
+            timelineModel.setTime(i);
+            timelineList.add(timelineModel);
+            i = i + halfHour;
+        }
+
+        headerChannelsList = new ArrayList<>();
+        for (int i = 0; i <= 100; i++) {
+            ChannelModel channelModel = new ChannelModel();
+            channelModel.setUri(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
+            headerChannelsList.add(channelModel);
+        }
     }
 }
