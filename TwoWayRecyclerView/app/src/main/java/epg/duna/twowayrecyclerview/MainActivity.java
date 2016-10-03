@@ -23,12 +23,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import epg.duna.twowayrecyclerview.model.ProgramModel;
 import genericepg.duna.project.adapter.GenericEpgAdapter;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
 import genericepg.duna.project.adapter.GenericProgramsAdapter;
 import genericepg.duna.project.adapter.GenericTimelineAdapter;
 import genericepg.duna.project.model.BaseChannelModel;
-import genericepg.duna.project.model.ProgramModel;
 import genericepg.duna.project.model.BaseTimelineModel;
 import genericepg.duna.project.observable.Subject;
 import genericepg.duna.project.utils.Utils;

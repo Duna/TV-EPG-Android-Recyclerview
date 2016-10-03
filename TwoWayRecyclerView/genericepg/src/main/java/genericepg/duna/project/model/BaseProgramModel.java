@@ -4,6 +4,7 @@ package genericepg.duna.project.model;
  * Created by Marius Duna on 9/30/2016.
  */
 
+//Extend your program model from this base class
 public class BaseProgramModel {
     private long startTime;
     private long endTime;

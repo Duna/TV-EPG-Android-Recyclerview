@@ -6,6 +6,7 @@ import android.net.Uri;
  * Created by Marius Duna on 9/30/2016.
  */
 
+//Extend your channel model from this base class
 public class BaseChannelModel {
     private Uri uri;
 
