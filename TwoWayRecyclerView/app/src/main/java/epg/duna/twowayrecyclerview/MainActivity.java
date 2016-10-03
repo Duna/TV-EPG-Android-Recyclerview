@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import epg.duna.twowayrecyclerview.model.ChannelModel;
 import epg.duna.twowayrecyclerview.model.ProgramModel;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Calendar calendar = Calendar.getInstance();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+    private DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
 
     private double nowTime;
 
@@ -76,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onBindData(RecyclerView.ViewHolder holder, final int position) {
                         ProgramModel programModel = (ProgramModel) getItem(position);
 
-                        DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
                         String day = minutesFormat.format(programModel.getStartTime());
                         ProgramsViewHolder myHolder = (ProgramsViewHolder) holder;
                         myHolder.title.setText(day);
@@ -112,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 calendar.setTime(date);
                 String str = simpleDateFormat.format(date.getTime());
 
-                DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM");
                 String day = minutesFormat.format(date.getTime());
                 myHolder.timeView.setText(str + "/" + day);
             }
@@ -147,30 +147,27 @@ public class MainActivity extends AppCompatActivity {
         return resUri;
     }
 
-    private void createDummyData(){
-        int hour = 3600000;
-        int halfHour = hour / 2;
-        int fifteenMin = hour / 4;
-        int day = hour * 24;
-        int week = day * 7;
+    private void createDummyData() {
+        long hour = TimeUnit.HOURS.toMillis(1);
+        long halfHour = hour / 2;
+        long fifteenMin = hour / 4;
+        long day = hour * 24;
+        long week = day * 7;
 
         nowTime = calendar.getTimeInMillis();
-        Random rand = new Random();
-        double nowwTime = nowTime + (long) rand.nextInt(hour * 2 + 1);
-        long startTimew = (long) nowwTime - 2 * week;
-        long endTimew = (long) nowwTime + 2 * week;
 
+        //generate EPG for -2 weeks and +2 weeks
         long startTime = (long) nowTime - 2 * week;
         long endTime = (long) nowTime + 2 * week;
 
         verticalList = new ArrayList<>();
         for (int j = 0; j <= 100; j++) {
             horizontalList = new ArrayList<>();
-            for (long i = startTimew; i <= endTimew; ) {
+            for (long i = startTime; i <= endTime; ) {
                 ProgramModel programModel = new ProgramModel();
                 programModel.setStartTime(i);
-                Random randw = new Random();
-                i = i + fifteenMin + randw.nextInt(hour);
+                Random random = new Random();
+                i = i + fifteenMin + random.nextInt((int)hour);
                 programModel.setEndTime(i);
                 programModel.setTitle("Title");
                 programModel.setDescription("Description");
