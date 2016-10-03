@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">Recycler EPG</string>
-    <string name="mini_epg_now_header">Now</string>
+    <string name="app_name">Generic EPG</string>
 </resources>

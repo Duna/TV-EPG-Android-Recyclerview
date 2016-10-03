@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <project.samp.mariusduna.twowayrecyclerview.view.EPGView
+    <genericepg.duna.project.view.EPGView
         android:id="@+id/epg"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </project.samp.mariusduna.twowayrecyclerview.view.EPGView>
+    </genericepg.duna.project.view.EPGView>
 </LinearLayout>
