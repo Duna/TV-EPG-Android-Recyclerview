@@ -13,8 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,9 +21,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import epg.duna.twowayrecyclerview.model.ChannelModel;
 import epg.duna.twowayrecyclerview.model.ProgramModel;
-import genericepg.duna.project.adapter.GenericEpgAdapter;
+import epg.duna.twowayrecyclerview.model.TimelineModel;
+import epg.duna.twowayrecyclerview.view.HeaderChannelViewHolder;
+import epg.duna.twowayrecyclerview.view.ProgramsViewHolder;
+import epg.duna.twowayrecyclerview.view.TimelineViewHolder;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
+import genericepg.duna.project.adapter.GenericEpgAdapter;
 import genericepg.duna.project.adapter.GenericProgramsAdapter;
 import genericepg.duna.project.adapter.GenericTimelineAdapter;
 import genericepg.duna.project.model.BaseChannelModel;
@@ -36,8 +39,8 @@ import genericepg.duna.project.view.EPGView;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<ProgramModel> horizontalList;
-    private ArrayList<BaseChannelModel> headerChannelsList;
-    private ArrayList<BaseTimelineModel> timelineList;
+    private ArrayList<ChannelModel> headerChannelsList;
+    private ArrayList<TimelineModel> timelineList;
     private ArrayList<ArrayList<ProgramModel>> verticalList;
 
     private GenericEpgAdapter epgAdapter;
@@ -51,41 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
     private EPGView epgView;
 
-    private class ProgramsViewHolder extends RecyclerView.ViewHolder {
-        public TextView title;
-        public TextView description;
-
-        public ProgramsViewHolder(View itemView) {
-            super(itemView);
-            title = (TextView) itemView.findViewById(R.id.program_title);
-            description = (TextView) itemView.findViewById(R.id.program_description);
-        }
-    }
-
-    public class HeaderChannelViewHolder extends RecyclerView.ViewHolder {
-        public ImageView channelLogo;
-
-        public HeaderChannelViewHolder(View view) {
-            super(view);
-            channelLogo = (ImageView) view.findViewById(R.id.channel_logo);
-        }
-    }
-
-    public class TimelineViewHolder extends RecyclerView.ViewHolder {
-        public TextView timeView;
-
-        public TimelineViewHolder(View view) {
-            super(view);
-            timeView = (TextView) view.findViewById(R.id.text_timeline);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        epgView  = (EPGView) findViewById(R.id.epg);
+        epgView = (EPGView) findViewById(R.id.epg);
 
         int hour = 3600000;
         int halfHour = hour / 2;
@@ -129,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         startTime = startTime + diff * 60000;
 
         for (long i = startTime; i <= endTime; ) {
-            BaseTimelineModel timelineModel = new BaseTimelineModel();
+            TimelineModel timelineModel = new TimelineModel();
             timelineModel.setTime(i);
             timelineList.add(timelineModel);
             i = i + halfHour;
@@ -137,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         headerChannelsList = new ArrayList<>();
         for (int i = 0; i <= 100; i++) {
-            BaseChannelModel channelModel = new BaseChannelModel();
+            ChannelModel channelModel = new ChannelModel();
             channelModel.setUri(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
             headerChannelsList.add(channelModel);
         }
