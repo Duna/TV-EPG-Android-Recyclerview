@@ -3,18 +3,14 @@ package project.samp.mariusduna.twowayrecyclerview;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.AnyRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,32 +32,24 @@ import project.samp.mariusduna.twowayrecyclerview.model.ProgramModel;
 import project.samp.mariusduna.twowayrecyclerview.model.TimelineModel;
 import project.samp.mariusduna.twowayrecyclerview.observable.Subject;
 import project.samp.mariusduna.twowayrecyclerview.utils.Utils;
+import project.samp.mariusduna.twowayrecyclerview.view.EPGView;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView epgRecyclerView;
-    private RecyclerView timelineRecyclerView;
-    private RecyclerView channelsRecyclerView;
     private ArrayList<ProgramModel> horizontalList;
+    private ArrayList<ChannelModel> headerChannelsList;
     private ArrayList<TimelineModel> timelineList;
     private ArrayList<ArrayList<ProgramModel>> verticalList;
+
     private EpgAdapter epgAdapter;
     private GenericTimelineAdapter genericTimelineAdapter;
-
-    private ArrayList<ChannelModel> headerChannelsList;
     private GenericChannelsAdapter channelsAdapter;
-    private Subject subject = new Subject();
 
     private Calendar calendar = Calendar.getInstance();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
-    private LinearLayoutManager horizontalLayoutManagaer;
-    private TextView currentTimeTextView;
-    private View nowVerticalLineView;
-    private TextView nowTextView;
-
-    private int location[] = new int[2];
     private double nowTime;
-    private int screenWidth;
+
+    private EPGView epgView;
 
     private class ProgramsViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
@@ -97,27 +85,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        currentTimeTextView = (TextView) findViewById(R.id.current_time);
-        epgRecyclerView = (RecyclerView) findViewById(R.id.epg_recycler_view);
-        timelineRecyclerView = (RecyclerView) findViewById(R.id.timeline_recycler_view);
-        channelsRecyclerView = (RecyclerView) findViewById(R.id.channels_recycler_view);
-        nowVerticalLineView = findViewById(R.id.epg_now_line);
-        nowTextView = (TextView) findViewById(R.id.epg_now_indicator);
-
-        nowTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                subject.setCurrentTime(nowTime);
-                subject.resetAllObservers();
-                int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
-                horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
-                        -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos).getTime(), nowTime, getApplicationContext()));
-            }
-        });
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        screenWidth = metrics.widthPixels;
+        epgView  = (EPGView) findViewById(R.id.epg);
 
         int hour = 3600000;
         int halfHour = hour / 2;
@@ -125,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
         int day = hour * 24;
         int week = day * 7;
 
-        Calendar c = Calendar.getInstance();
-        nowTime = c.getTimeInMillis();
+        nowTime = calendar.getTimeInMillis();
         Random rand = new Random();
         double nowwTime = nowTime + (long) rand.nextInt(hour * 2 + 1);
         long startTimew = (long) nowwTime - 2 * week;
@@ -134,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
         long startTime = (long) nowTime - 2 * week;
         long endTime = (long) nowTime + 2 * week;
-        subject.setSystemTime(nowTime);
 
         verticalList = new ArrayList<>();
         for (int j = 0; j <= 30; j++) {
@@ -209,7 +175,6 @@ public class MainActivity extends AppCompatActivity {
                 };
             }
         };
-        epgAdapter.setSubject(subject);
 
         genericTimelineAdapter = new GenericTimelineAdapter(timelineList) {
             @Override
@@ -232,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                 myHolder.timeView.setText(str + "/" + day);
             }
         };
-        timelineRecyclerView.setAdapter(genericTimelineAdapter);
+        epgView.setTimelineAdapter(genericTimelineAdapter);
 
         channelsAdapter = new GenericChannelsAdapter(headerChannelsList) {
             @Override
@@ -248,90 +213,9 @@ public class MainActivity extends AppCompatActivity {
                 myHolder.channelLogo.setImageURI(programModel.getUri());
             }
         };
-        channelsRecyclerView.setAdapter(channelsAdapter);
 
-
-        final LinearLayoutManager epgLayoutmanager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        LinearLayoutManager channelsLayoutmanager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
-        horizontalLayoutManagaer = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        timelineRecyclerView.setLayoutManager(horizontalLayoutManagaer);
-        epgRecyclerView.setLayoutManager(epgLayoutmanager);
-        channelsRecyclerView.setLayoutManager(channelsLayoutmanager);
-
-        timelineRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                subject.setState(dx); //we should store the time
-                double currentTime = subject.getCurrentTime();
-                double millisPx = Utils.convertPxToMilliseconds(dx > 0 ? dx : -dx, getApplicationContext());
-                double finalValue = dx > 0 ? currentTime + millisPx : currentTime - millisPx;
-                subject.setCurrentTime(finalValue);
-                updateCurrentTime((long) finalValue);
-                updateNowIndicator();
-            }
-
-            private void updateNowIndicator() {
-                float positionOnScreen = Utils.convertMillisecondsToPx((float) (subject.getSystemTime() - subject.getCurrentTime()), getApplicationContext());
-                if (positionOnScreen + channelsRecyclerView.getWidth() < channelsRecyclerView.getWidth()) {
-                    nowVerticalLineView.setVisibility(View.INVISIBLE);
-                    nowTextView.setBackgroundResource(R.drawable.ic_now_left);
-                    nowTextView.setX(channelsRecyclerView.getWidth());
-                }
-                if (positionOnScreen + channelsRecyclerView.getWidth() >= channelsRecyclerView.getWidth() && positionOnScreen < screenWidth) {
-                    if (nowVerticalLineView.getVisibility() == View.INVISIBLE) {
-                        nowVerticalLineView.setVisibility(View.VISIBLE);
-                        nowTextView.setBackgroundResource(R.drawable.ic_now_center);
-                    }
-                    nowVerticalLineView.setX(positionOnScreen + channelsRecyclerView.getWidth());
-                    nowTextView.setX(positionOnScreen - nowTextView.getWidth() / 2 + channelsRecyclerView.getWidth());
-                }
-                if (positionOnScreen + channelsRecyclerView.getWidth() >= screenWidth) {
-                    nowVerticalLineView.setVisibility(View.INVISIBLE);
-                    nowTextView.setX(screenWidth - nowTextView.getWidth());
-                    nowTextView.setBackgroundResource(R.drawable.ic_now_right);
-                }
-            }
-
-            private void updateCurrentTime(long currentTime) {
-                Date date = new Date(currentTime);
-                DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM hh:mm:ss");
-                currentTimeTextView.setText(dateFormat.format(date));
-            }
-        });
-        subject.setCurrentTime(nowTime);
-        int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
-        horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
-                -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos).getTime(), nowTime, getApplicationContext()));
-
-        epgRecyclerView.setAdapter(epgAdapter);
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        //manual dispatch events to specific view hierarchy
-        dispatchEventForView(ev, timelineRecyclerView);
-        dispatchEventForView(ev, epgRecyclerView);
-        dispatchEventForView(ev, channelsRecyclerView);
-
-        nowTextView.getLocationInWindow(location);
-        Rect editTextRect = new Rect();
-        nowTextView.getHitRect(editTextRect);
-        if (editTextRect.contains((int) ev.getX(), (int) ev.getY() - location[1])) {
-            nowTextView.dispatchTouchEvent(ev);
-        }
-        return true;
-    }
-
-    private <T extends View> void dispatchEventForView(MotionEvent ev, T genericView) {
-        genericView.getLocationInWindow(location);
-        MotionEvent motionEvent = MotionEvent.obtain(ev.getDownTime(), ev.getEventTime(), ev.getAction(), ev.getX() - location[0], ev.getY() - location[1], ev.getMetaState());
-        genericView.dispatchTouchEvent(motionEvent);
+        epgView.setChannelsAdapter(channelsAdapter);
+        epgView.setEpgAdapter(epgAdapter);
     }
 
     public static final Uri getUriToResource(@NonNull Context context, @AnyRes int resId) throws Resources.NotFoundException {

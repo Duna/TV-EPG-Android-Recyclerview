@@ -55,7 +55,7 @@ public abstract class EpgAdapter<T extends BaseProgramModel> extends RecyclerVie
 
         public void initialScroll() {
             ArrayList<BaseProgramModel> list = ((GenericProgramsAdapter) recyclerView.getAdapter()).getArrayList();
-            final int initialPosition = Utils.getInitialPositionInList(subject.getSystemTime(), list);
+            final int initialPosition = Utils.getInitialPositionInList(subject.getCurrentTime(), list);
             final float initialOffset = Utils.getInitialProgramOffsetPx(list.get(initialPosition).getStartTime(), subject.getSystemTime(), recyclerView.getContext());
             ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(initialPosition, -(int) (initialOffset + subject.getInitialPosition()));
         }

@@ -1,63 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="project.samp.mariusduna.twowayrecyclerview.MainActivity">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/timeline_recycler_view"
+    <project.samp.mariusduna.twowayrecyclerview.view.EPGView
+        android:id="@+id/epg"
         android:layout_width="match_parent"
-        android:layout_height="41dp"
-        android:layout_toEndOf="@+id/channels_recycler_view"
-        android:background="#fff" />
+        android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/epg_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/timeline_recycler_view"
-        android:layout_toEndOf="@id/channels_recycler_view"
-        android:background="#fff" />
-
-    <View
-        android:id="@+id/epg_now_line"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/channels_recycler_view"
-        android:layout_marginTop="-6dp"
-        android:background="@android:color/white" />
-
-    <TextView
-        android:id="@+id/epg_now_indicator"
-        android:layout_width="65dp"
-        android:layout_height="48dp"
-        android:background="@drawable/ic_now_center"
-        android:clickable="true"
-        android:gravity="center"
-        android:text="@string/mini_epg_now_header"
-        android:textAllCaps="true"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/channels_recycler_view"
-        android:layout_width="@dimen/epg_item_container_height"
-        android:layout_height="match_parent"
-        android:layout_below="@id/timeline_recycler_view"
-        android:background="#fff" />
-
-    <TextView
-        android:id="@+id/current_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/channels_recycler_view"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/timeline_recycler_view"
-        android:background="@color/default_color_dark"
-        android:gravity="center"
-        android:text="EPG!"
-        android:textColor="@android:color/white" />
-</RelativeLayout>
+    </project.samp.mariusduna.twowayrecyclerview.view.EPGView>
+</LinearLayout>

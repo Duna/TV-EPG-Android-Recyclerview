@@ -14,12 +14,13 @@ import java.util.Date;
 import java.util.List;
 
 import project.samp.mariusduna.twowayrecyclerview.R;
+import project.samp.mariusduna.twowayrecyclerview.model.TimelineModel;
 
 /**
  * Created by Marius Duna on 9/12/2016.
  * This is duplicate of GenericPrograms Adapter, specially added in case further modifications only for timeline view
  */
-public abstract class GenericTimelineAdapter<O> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class GenericTimelineAdapter<O extends TimelineModel> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<O> timeList;
 
     public abstract RecyclerView.ViewHolder setViewHolder(ViewGroup parent);
@@ -50,4 +51,7 @@ public abstract class GenericTimelineAdapter<O> extends RecyclerView.Adapter<Rec
         return timeList.get(position);
     }
 
+    public List<O> getList(){
+        return timeList;
+    }
 }
