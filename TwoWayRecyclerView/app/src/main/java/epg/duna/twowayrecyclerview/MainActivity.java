@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
-import genericepg.duna.project.adapter.EpgAdapter;
+import genericepg.duna.project.adapter.GenericEpgAdapter;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
 import genericepg.duna.project.adapter.GenericProgramsAdapter;
 import genericepg.duna.project.adapter.GenericTimelineAdapter;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<TimelineModel> timelineList;
     private ArrayList<ArrayList<ProgramModel>> verticalList;
 
-    private EpgAdapter epgAdapter;
+    private GenericEpgAdapter epgAdapter;
     private GenericTimelineAdapter genericTimelineAdapter;
     private GenericChannelsAdapter channelsAdapter;
 
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
             headerChannelsList.add(channelModel);
         }
 
-        epgAdapter = new EpgAdapter(verticalList) {
+        epgAdapter = new GenericEpgAdapter(verticalList) {
             @Override
             public GenericProgramsAdapter programsCreator(ArrayList programList, final Subject subject) {
                 return new GenericProgramsAdapter(programList) {

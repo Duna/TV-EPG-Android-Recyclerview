@@ -19,7 +19,7 @@ import genericepg.duna.project.utils.Utils;
 /**
  * Created by Marius Duna on 9/9/2016.
  */
-public abstract class EpgAdapter<T extends BaseProgramModel> extends RecyclerView.Adapter<EpgAdapter.EpgViewHolder> {
+public abstract class GenericEpgAdapter<T extends BaseProgramModel> extends RecyclerView.Adapter<GenericEpgAdapter.EpgViewHolder> {
     private RecyclerView.RecycledViewPool recycledViewPool;
     private ArrayList<ArrayList<T>> channelsList;
     private Subject subject;
@@ -60,7 +60,7 @@ public abstract class EpgAdapter<T extends BaseProgramModel> extends RecyclerVie
         }
     }
 
-    public EpgAdapter(ArrayList<ArrayList<T>> verticalList) {
+    public GenericEpgAdapter(ArrayList<ArrayList<T>> verticalList) {
         this.channelsList = verticalList;
         recycledViewPool = new RecyclerView.RecycledViewPool();
         recycledViewPool.setMaxRecycledViews(R.layout.vrecycler_view_item, 20);

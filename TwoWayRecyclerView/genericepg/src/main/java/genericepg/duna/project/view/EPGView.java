@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import genericepg.duna.project.R;
-import genericepg.duna.project.adapter.EpgAdapter;
+import genericepg.duna.project.adapter.GenericEpgAdapter;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
 import genericepg.duna.project.adapter.GenericTimelineAdapter;
 import genericepg.duna.project.model.TimelineModel;
@@ -169,7 +169,7 @@ public class EPGView extends RelativeLayout {
         genericView.dispatchTouchEvent(motionEvent);
     }
 
-    public void setEpgAdapter(EpgAdapter epgAdapter) {
+    public void setEpgAdapter(GenericEpgAdapter epgAdapter) {
         epgRecyclerView.setAdapter(epgAdapter);
         epgAdapter.setSubject(subject);
     }
