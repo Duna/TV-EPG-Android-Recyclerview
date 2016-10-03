@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import genericepg.duna.project.R;
 import genericepg.duna.project.model.BaseProgramModel;
-import genericepg.duna.project.model.TimelineModel;
+import genericepg.duna.project.model.BaseTimelineModel;
 
 
 /**
@@ -19,7 +19,7 @@ import genericepg.duna.project.model.TimelineModel;
  */
 public class Utils {
     private static BaseProgramModel programModel = new BaseProgramModel();
-    private static TimelineModel timelineModel = new TimelineModel();
+    private static BaseTimelineModel timelineModel = new BaseTimelineModel();
     private static float pxPerMinConstant(Context context) {
         return convertDpToPixel(context.getResources().getDimension(R.dimen.epg_width_one_min), context);
     }
@@ -51,7 +51,7 @@ public class Utils {
         }
     };
 
-    public static int getInitialPositionInTimelineList(double currentTime, ArrayList<TimelineModel> arrayList) {
+    public static int getInitialPositionInTimelineList(double currentTime, ArrayList<BaseTimelineModel> arrayList) {
         timelineModel.setTime((long) currentTime);
         int pos = Collections.binarySearch(arrayList, timelineModel, comparatorTime);
         //TODO handle the situation when the list has less than 2 items
@@ -59,8 +59,8 @@ public class Utils {
         return pos;
     }
 
-    private static Comparator<TimelineModel> comparatorTime = new Comparator<TimelineModel>() {
-        public int compare(TimelineModel u1, TimelineModel u2) {
+    private static Comparator<BaseTimelineModel> comparatorTime = new Comparator<BaseTimelineModel>() {
+        public int compare(BaseTimelineModel u1, BaseTimelineModel u2) {
             return (int) (u1.getTime() - u2.getTime());
         }
     };

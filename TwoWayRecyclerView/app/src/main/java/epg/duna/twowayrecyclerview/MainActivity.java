@@ -27,17 +27,17 @@ import genericepg.duna.project.adapter.GenericEpgAdapter;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
 import genericepg.duna.project.adapter.GenericProgramsAdapter;
 import genericepg.duna.project.adapter.GenericTimelineAdapter;
-import genericepg.duna.project.model.ChannelModel;
+import genericepg.duna.project.model.BaseChannelModel;
 import genericepg.duna.project.model.ProgramModel;
-import genericepg.duna.project.model.TimelineModel;
+import genericepg.duna.project.model.BaseTimelineModel;
 import genericepg.duna.project.observable.Subject;
 import genericepg.duna.project.utils.Utils;
 import genericepg.duna.project.view.EPGView;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<ProgramModel> horizontalList;
-    private ArrayList<ChannelModel> headerChannelsList;
-    private ArrayList<TimelineModel> timelineList;
+    private ArrayList<BaseChannelModel> headerChannelsList;
+    private ArrayList<BaseTimelineModel> timelineList;
     private ArrayList<ArrayList<ProgramModel>> verticalList;
 
     private GenericEpgAdapter epgAdapter;
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         startTime = startTime + diff * 60000;
 
         for (long i = startTime; i <= endTime; ) {
-            TimelineModel timelineModel = new TimelineModel();
+            BaseTimelineModel timelineModel = new BaseTimelineModel();
             timelineModel.setTime(i);
             timelineList.add(timelineModel);
             i = i + halfHour;
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
         headerChannelsList = new ArrayList<>();
         for (int i = 0; i <= 100; i++) {
-            ChannelModel channelModel = new ChannelModel();
+            BaseChannelModel channelModel = new BaseChannelModel();
             channelModel.setUri(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
             headerChannelsList.add(channelModel);
         }
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, int position) {
-                TimelineModel timelineModel = (TimelineModel) getItem(position);
+                BaseTimelineModel timelineModel = (BaseTimelineModel) getItem(position);
                 TimelineViewHolder myHolder = (TimelineViewHolder) holder;
 
                 Date date = new Date(timelineModel.getTime());
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, int position) {
-                ChannelModel programModel = (ChannelModel) getItem(position);
+                BaseChannelModel programModel = (BaseChannelModel) getItem(position);
                 HeaderChannelViewHolder myHolder = (HeaderChannelViewHolder) holder;
                 myHolder.channelLogo.setImageURI(programModel.getUri());
             }

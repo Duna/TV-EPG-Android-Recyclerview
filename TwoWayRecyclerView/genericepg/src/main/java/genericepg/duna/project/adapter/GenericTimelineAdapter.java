@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import genericepg.duna.project.model.TimelineModel;
+import genericepg.duna.project.model.BaseTimelineModel;
 
 /**
  * Created by Marius Duna on 9/12/2016.
  * This is duplicate of GenericPrograms Adapter, specially added in case further modifications only for timeline view
  */
-public abstract class GenericTimelineAdapter<O extends TimelineModel> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class GenericTimelineAdapter<O extends BaseTimelineModel> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<O> timeList;
 
     public abstract RecyclerView.ViewHolder setViewHolder(ViewGroup parent);

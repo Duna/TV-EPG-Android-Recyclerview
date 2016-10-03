@@ -1,8 +1,11 @@
-package genericepg.duna.project.model;
+package epg.duna.twowayrecyclerview.model;
+
+import genericepg.duna.project.model.BaseProgramModel;
 
 /**
- * Created by Marius Duna on 9/15/2016.
+ * Created by Marius Duna on 10/3/2016.
  */
+
 public class ProgramModel extends BaseProgramModel {
     private String title;
     private String description;

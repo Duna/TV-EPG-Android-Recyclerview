@@ -21,7 +21,7 @@ import genericepg.duna.project.R;
 import genericepg.duna.project.adapter.GenericEpgAdapter;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
 import genericepg.duna.project.adapter.GenericTimelineAdapter;
-import genericepg.duna.project.model.TimelineModel;
+import genericepg.duna.project.model.BaseTimelineModel;
 import genericepg.duna.project.observable.Subject;
 import genericepg.duna.project.utils.Utils;
 
@@ -83,7 +83,7 @@ public class EPGView extends RelativeLayout {
             public void onClick(View v) {
                 subject.setCurrentTime(nowTime);
                 subject.resetAllObservers();
-                ArrayList<TimelineModel> timelineList = (ArrayList<TimelineModel>) ((GenericTimelineAdapter) timelineRecyclerView.getAdapter()).getList();
+                ArrayList<BaseTimelineModel> timelineList = (ArrayList<BaseTimelineModel>) ((GenericTimelineAdapter) timelineRecyclerView.getAdapter()).getList();
                 int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
                 horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
                         -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos).getTime(), nowTime, getContext()));
@@ -180,7 +180,7 @@ public class EPGView extends RelativeLayout {
 
     public void setTimelineAdapter(GenericTimelineAdapter timelineAdapter) {
         timelineRecyclerView.setAdapter(timelineAdapter);
-        ArrayList<TimelineModel> timelineList = (ArrayList<TimelineModel>) ((GenericTimelineAdapter) timelineRecyclerView.getAdapter()).getList();
+        ArrayList<BaseTimelineModel> timelineList = (ArrayList<BaseTimelineModel>) ((GenericTimelineAdapter) timelineRecyclerView.getAdapter()).getList();
         int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
         horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
                 -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos).getTime(), nowTime, getContext()));
