@@ -9,9 +9,7 @@ Features:
 - diagonally scrolling
 - smoth scrolling
 
-Example project is located in repo.
-
-![epg1](https://user-images.githubusercontent.com/3800514/64890600-b3a70d80-d678-11e9-9139-73d888ca529b.png)
+Example project is located in repo. Click the image below to watch the demo.
 
 [![IMAGE ALT TEXT HERE](https://user-images.githubusercontent.com/3800514/64890600-b3a70d80-d678-11e9-9139-73d888ca529b.png)](https://youtu.be/-7B5I-SlGIA)
 
