@@ -5,7 +5,7 @@ Features:
 - clicks can be handled on each program
 - now indicator, that scrolls to current time when cklicked
 - high performance rendering using the power of recyclerview. 
-- tested for one month of 30 channels, using Nexus 5 - runs flawesly
+- tested for <b>ONE month of 100 channels</b>, using Nexus 5 - runs flawesly
 - diagonally scrolling
 - smoth scrolling
 
