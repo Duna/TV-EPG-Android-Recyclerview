@@ -9,6 +9,8 @@ Features:
 
 Example project is located in repo.
 
+![epg](https://user-images.githubusercontent.com/3800514/64890250-d7b61f00-d677-11e9-9f43-f6859ab4c440.png)
+
 Thats basically it. If you want to use it in your project you need resources from the example project as well as the EPG package for it to work. If you have any questions or such don't hesitate to contact me.
 
 Good luck!
