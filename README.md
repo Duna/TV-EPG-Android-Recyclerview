@@ -6,6 +6,8 @@ Features:
 - now indicator, that scrolls to current time when cklicked
 - high performance rendering using the power of recyclerview. 
 - tested for one month of 30 channels, using Nexus 5 - runs flawesly
+- diagonally scrolling
+- smoth scrolling
 
 Example project is located in repo.
 
