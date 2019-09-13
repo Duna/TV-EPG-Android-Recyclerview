@@ -1,4 +1,4 @@
-<title>Performant Electronic Program Guide for Android based on Recyclerview</title>
+<b>Performant Electronic Program Guide for Android based on Recyclerview</b>
 
 This is a "classic" TV EPG which works on tablets and phones and allows you to scroll in all directions (horizontal, vertical and diagonal). 
 Features:
