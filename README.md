@@ -3,6 +3,7 @@ Electronic Program Guide for Android based on Recyclerview
 This is a "classic" TV EPG which works on tablets and phones and allows you to scroll in all directions (horizontal, vertical and diagonal). 
 Features:
 - clicks can be handled on each program
+- now indicator, that scrolls to current time when cklicked
 - high performance rendering using the power of recyclerview. 
 - tested for one month of 30 channels, using Nexus 5 - runs flawesly
 
