@@ -1,5 +1,7 @@
 <b>Performant Electronic Program Guide for Android based on the power of Recyclerview </b>
 
+The fastest EPG library on Earth! 
+
 This is a "classic" TV EPG which works on tablets and phones and allows you to scroll in all directions (horizontal, vertical and diagonal). 
 Features:
 - clicks can be handled on each program
