@@ -1,7 +1,7 @@
 <b>Performant Electronic Program Guide for Android based on the power of Recyclerview </b>
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/dunatv) 
 <div style="text-align: center">
-    [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/dunatv) 
     <img src="https://hitcounter.pythonanywhere.com/count/tag.svg?url=https%3A%2F%2Fgithub.com%2FDuna%2FTV-EPG-Android-Recyclerview%2Fedit%2Fmaster%2FREADME.md" alt="Hits">
 </div>
 
