@@ -1,5 +1,7 @@
 <b>Performant Electronic Program Guide for Android based on the power of Recyclerview </b>
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/dunatv)
+
 The fastest EPG library on Earth! 
 
 Link to your project from Mavencentral
