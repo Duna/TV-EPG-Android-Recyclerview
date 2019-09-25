@@ -1,10 +1,11 @@
 package genericepg.duna.project.listener;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Marius Duna on 9/30/2016.

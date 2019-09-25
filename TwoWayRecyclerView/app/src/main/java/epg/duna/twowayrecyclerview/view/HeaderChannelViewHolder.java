@@ -1,8 +1,9 @@
 package epg.duna.twowayrecyclerview.view;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import epg.duna.twowayrecyclerview.R;
 
@@ -15,6 +16,6 @@ public class HeaderChannelViewHolder extends RecyclerView.ViewHolder {
 
     public HeaderChannelViewHolder(View view) {
         super(view);
-        channelLogo = (ImageView) view.findViewById(R.id.channel_logo);
+        channelLogo = view.findViewById(R.id.channel_logo);
     }
 }

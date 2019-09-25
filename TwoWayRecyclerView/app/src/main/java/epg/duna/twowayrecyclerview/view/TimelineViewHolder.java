@@ -1,8 +1,9 @@
 package epg.duna.twowayrecyclerview.view;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import epg.duna.twowayrecyclerview.R;
 
@@ -15,6 +16,6 @@ public class TimelineViewHolder extends RecyclerView.ViewHolder {
 
     public TimelineViewHolder(View view) {
         super(view);
-        timeView = (TextView) view.findViewById(R.id.text_timeline);
+        timeView = view.findViewById(R.id.text_timeline);
     }
 }

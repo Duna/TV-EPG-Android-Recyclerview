@@ -1,11 +1,12 @@
 package genericepg.duna.project.adapter;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -80,7 +81,7 @@ public abstract class GenericEpgAdapter<T extends BaseProgramModel> extends Recy
     }
 
     @Override
-    public void onBindViewHolder(EpgViewHolder holder, int position) {
+    public void onBindViewHolder(GenericEpgAdapter.EpgViewHolder holder, int position) {
         holder.setList(channelsList.get(position));
         holder.initialScroll();
     }

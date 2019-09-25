@@ -1,8 +1,9 @@
 package epg.duna.twowayrecyclerview.view;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import epg.duna.twowayrecyclerview.R;
 
@@ -16,7 +17,7 @@ public class ProgramsViewHolder extends RecyclerView.ViewHolder {
 
     public ProgramsViewHolder(View itemView) {
         super(itemView);
-        title = (TextView) itemView.findViewById(R.id.program_title);
-        description = (TextView) itemView.findViewById(R.id.program_description);
+        title = itemView.findViewById(R.id.program_title);
+        description = itemView.findViewById(R.id.program_description);
     }
 }
