@@ -8,6 +8,14 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.1'
         classpath 'com.novoda:bintray-release:0.8.0'
+        classpath 'com.github.dcendents:android-maven-plugin:1.2'
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
+    }
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked"
+        }
     }
 }
 
@@ -20,4 +28,8 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+task archive(type: Zip) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
 }

@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import genericepg.duna.project.R;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
@@ -119,7 +120,7 @@ public class EPGView extends RelativeLayout {
 
             private void updateCurrentTime(long currentTime) {
                 Date date = new Date(currentTime);
-                DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM hh:mm:ss");
+                DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM hh:mm:ss", Locale.US);
                 currentTimeTextView.setText(dateFormat.format(date));
             }
         });

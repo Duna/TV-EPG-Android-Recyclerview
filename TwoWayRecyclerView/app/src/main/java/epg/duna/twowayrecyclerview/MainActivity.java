@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EPGView epgView;
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
