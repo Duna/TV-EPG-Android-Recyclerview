@@ -1,6 +1,7 @@
 package genericepg.duna.project.observable;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 public class Subject {
     private int dx;
     private int initialPosition;
-    private Handler handler = new Handler();
+    private Handler handler = new Handler(Looper.getMainLooper());
     private List<ObservableRecyclerView> observers = new ArrayList<ObservableRecyclerView>();
     private double currentTime;
     private double systemTime;

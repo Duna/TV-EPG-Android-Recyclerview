@@ -56,6 +56,6 @@
         android:layout_toStartOf="@+id/timeline_recycler_view"
         android:background="@color/default_color_dark"
         android:gravity="center"
-        android:text="EPG!"
+        android:text="@string/epg"
         android:textColor="@android:color/white" />
 </RelativeLayout>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GenericEPG</string>
     <string name="mini_epg_now_header">Now</string>
+    <string name="epg">EPG!</string>
 </resources>

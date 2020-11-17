@@ -1,11 +1,33 @@
+apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.android.library'
 
+publish {
+
+    def groupProjectID = 'genericepg.duna.project'
+    def artifactProjectID = 'tvepg'
+    def publishVersionID = '1.0.1'
+
+    userOrg = 'dunatv'
+    repoName = 'TV_EPG'
+    groupId = groupProjectID
+    artifactId = artifactProjectID
+    publishVersion = publishVersionID
+    desc = 'Android library for a performant Electronic Program Guide(EPG) using Recyclerview all the way up'
+    website = 'https://github.com/Duna/TV-EPG-Android-Recyclerview'
+
+}
+
 android {
-    compileSdkVersion 29
+
+    lintOptions {
+        ignoreWarnings = true
+    }
+
+    compileSdkVersion 30
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 2
         versionName "1.1"
 

@@ -171,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
                 programModel.setEndTime(i);
                 programModel.setTitle("Title");
                 programModel.setDescription("Description");
-                programModel.setColorTitle(getResources().getColor(R.color.colorPrimary));
-                programModel.setColorDescription(getResources().getColor(R.color.colorAccent));
+                programModel.setColorTitle(ContextCompat.getColor(this, R.color.colorPrimary));
+                programModel.setColorDescription(ContextCompat.getColor(this, R.color.colorAccent));
                 horizontalList.add(programModel);
             }
             verticalList.add(horizontalList);

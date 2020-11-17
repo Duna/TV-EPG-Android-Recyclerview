@@ -3,6 +3,7 @@ package genericepg.duna.project.view;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -68,7 +69,7 @@ public class EPGView extends RelativeLayout {
 
     private void init() {
         inflate(getContext(), R.layout.epg_layout, this);
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
         currentTimeTextView = (TextView) findViewById(R.id.current_time);
         epgRecyclerView = findViewById(R.id.epg_recycler_view);
         timelineRecyclerView = findViewById(R.id.timeline_recycler_view);
