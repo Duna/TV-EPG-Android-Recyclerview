@@ -3,7 +3,6 @@ package genericepg.duna.project.view;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import genericepg.duna.project.R;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
@@ -68,24 +68,54 @@ public class EPGView extends RelativeLayout {
         screenWidth = w;
     }
 
+    public double getNowTime() {
+        return subject.getCurrentTime();
+    }
+
+    public static int getTimeOffset(long time) {
+        TimeZone tz = TimeZone.getDefault();
+        return tz.getOffset(time);
+    }
+
     private void init() {
         inflate(getContext(), R.layout.epg_layout, this);
-        handler = new Handler(Looper.getMainLooper());
-        currentTimeTextView = (TextView) findViewById(R.id.current_time);
+        handler = new Handler();
+        currentTimeTextView = findViewById(R.id.current_time);
         epgRecyclerView = findViewById(R.id.epg_recycler_view);
         timelineRecyclerView = findViewById(R.id.timeline_recycler_view);
         channelsRecyclerView = findViewById(R.id.channels_recycler_view);
         nowVerticalLineView = findViewById(R.id.epg_now_line);
-        nowTextView = (TextView) findViewById(R.id.epg_now_indicator);
+        nowTextView = findViewById(R.id.epg_now_indicator);
 
-        nowTime = calendar.getTimeInMillis();
+        long millis = calendar.getTimeInMillis();
+        nowTime = millis;// + getTimeOffset(millis);
         subject.setSystemTime(nowTime);
+
+    /*    DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM HH:mm");
+        String dayy = minutesFormat.format(nowTime);
+        Toast.makeText(getContext(), "Start Time is: " + dayy, Toast.LENGTH_LONG).show();*/
+
+      /*  Handler h = new Handler();
+        h.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<BaseTimelineModel> timelineList = (ArrayList<BaseTimelineModel>) ((GenericTimelineAdapter) timelineRecyclerView.getAdapter()).getList();
+                int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
+
+                DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM HH:mm");
+                String dayy = minutesFormat.format(timelineList.get(0).getTime());
+
+                Toast.makeText(getContext(), "Time start:" + dayy, Toast.LENGTH_LONG).show();
+            }
+        }, 1000);*/
+
 
         nowTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 subject.setCurrentTime(nowTime);
                 subject.resetAllObservers();
+
                 ArrayList<BaseTimelineModel> timelineList = (ArrayList<BaseTimelineModel>) ((GenericTimelineAdapter) timelineRecyclerView.getAdapter()).getList();
                 int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
                 horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
@@ -120,7 +150,7 @@ public class EPGView extends RelativeLayout {
 
             private void updateCurrentTime(long currentTime) {
                 Date date = new Date(currentTime);
-                DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM hh:mm:ss", Locale.US);
+                DateFormat dateFormat = new SimpleDateFormat("EEE dd MMM HH:mm", Locale.US);
                 currentTimeTextView.setText(dateFormat.format(date));
             }
         });
@@ -149,11 +179,10 @@ public class EPGView extends RelativeLayout {
         }
     }
 
+    //TODO fix the crash when tapping with more than one finger
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //manual dispatch events to specific view hierarchy
-        if (ev.getPointerCount() > 1)
-            return false;
         dispatchEventForView(ev, timelineRecyclerView);
         dispatchEventForView(ev, epgRecyclerView);
         dispatchEventForView(ev, channelsRecyclerView);
@@ -168,8 +197,10 @@ public class EPGView extends RelativeLayout {
     }
 
     private <T extends View> void dispatchEventForView(MotionEvent ev, T genericView) {
-        genericView.getLocationInWindow(location);
-        MotionEvent motionEvent = MotionEvent.obtain(ev.getDownTime(), ev.getEventTime(), ev.getAction(), ev.getX() - location[0], ev.getY() - location[1], ev.getMetaState());
+        //genericView.getLocationInWindow(location);
+        int height = timelineRecyclerView.getHeight();
+        int width = channelsRecyclerView.getWidth();
+        MotionEvent motionEvent = MotionEvent.obtain(ev.getDownTime(), ev.getEventTime(), ev.getAction(), ev.getX() - width/*- location[0]*/, ev.getY() - height /*- location[1]*/, ev.getMetaState());
         genericView.dispatchTouchEvent(motionEvent);
     }
 
@@ -183,16 +214,32 @@ public class EPGView extends RelativeLayout {
     }
 
     public void setTimelineAdapter(GenericTimelineAdapter timelineAdapter) {
+        showNowIndicator();
         timelineRecyclerView.setAdapter(timelineAdapter);
         ArrayList<BaseTimelineModel> timelineList = (ArrayList<BaseTimelineModel>) ((GenericTimelineAdapter) timelineRecyclerView.getAdapter()).getList();
         int timelineCurrentPos = Utils.getInitialPositionInTimelineList(nowTime, timelineList);
-        horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
-                -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos).getTime(), nowTime, getContext()));
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                updateNowIndicator();
-            }
-        }, 50);
+
+        try {
+            horizontalLayoutManagaer.scrollToPositionWithOffset(timelineCurrentPos,
+                    -Utils.getInitialProgramOffsetPx(timelineList.get(timelineCurrentPos).getTime(), nowTime, getContext()));
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    updateNowIndicator();
+                }
+            }, 50);
+        } catch (Exception e) {
+            hideNowIndicator();
+        }
+    }
+
+    private void hideNowIndicator() {
+        nowVerticalLineView.setVisibility(View.GONE);
+        nowTextView.setVisibility(View.GONE);
+    }
+
+    private void showNowIndicator() {
+        nowVerticalLineView.setVisibility(View.VISIBLE);
+        nowTextView.setVisibility(View.VISIBLE);
     }
 }

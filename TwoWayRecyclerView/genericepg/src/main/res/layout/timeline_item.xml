@@ -3,16 +3,18 @@
     android:layout_width="@dimen/epg_width_thirty_min"
     android:layout_height="@dimen/epg_timeline_height"
     android:layout_gravity="center"
-    android:background="@android:color/black"
-    android:paddingRight="1px"
-    android:orientation="vertical">
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingRight="1px">
 
     <TextView
         android:id="@+id/text_timeline"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/default_color_dark"
-        android:gravity="center_vertical"
+        android:ellipsize="middle"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 </LinearLayout>

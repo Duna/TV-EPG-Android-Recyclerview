@@ -5,4 +5,5 @@
     <dimen name="epg_width_thirty_min">180dp</dimen>
     <dimen name="epg_width_fifteen_min">90dp</dimen>
     <dimen name="epg_timeline_height">41dp</dimen>
+    <dimen name="epg_channel_name_width">80dp</dimen>
 </resources>

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ public abstract class GenericEpgAdapter<T extends BaseProgramModel> extends Recy
     private RecyclerView.RecycledViewPool recycledViewPool;
     private ArrayList<ArrayList<T>> channelsList;
     private Subject subject;
+    private RecyclerItemClickListener.OnItemClickListener listener;
 
     public void setSubject(Subject subject) {
         this.subject = subject;
@@ -34,14 +36,17 @@ public abstract class GenericEpgAdapter<T extends BaseProgramModel> extends Recy
 
         public EpgViewHolder(View view) {
             super(view);
-            recyclerView = (ObservableRecyclerView) view.findViewById(R.id.horizontal_recycler_view);
+            recyclerView = view.findViewById(R.id.horizontal_recycler_view);
             recyclerView.setSubject(subject);
             LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(horizontalLayoutManager);
             recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(recyclerView.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
-                   // Toast.makeText(recyclerView.getContext(), "Position: " + position, Toast.LENGTH_SHORT).show();
+                    if (listener != null) {
+                        listener.onItemClick(view, position);
+                        //You can put in your generic view an UID for each channel and program in order to identify the channel clicked also
+                    }
                 }
             }));
         }
@@ -56,13 +61,15 @@ public abstract class GenericEpgAdapter<T extends BaseProgramModel> extends Recy
         public void initialScroll() {
             ArrayList<BaseProgramModel> list = ((GenericProgramsAdapter) recyclerView.getAdapter()).getArrayList();
             final int initialPosition = Utils.getInitialPositionInList(subject.getCurrentTime(), list);
+            if (initialPosition == -1) return;
             final float initialOffset = Utils.getInitialProgramOffsetPx(list.get(initialPosition).getStartTime(), subject.getSystemTime(), recyclerView.getContext());
             ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(initialPosition, -(int) (initialOffset + subject.getInitialPosition()));
         }
     }
 
-    public GenericEpgAdapter(ArrayList<ArrayList<T>> verticalList) {
+    public GenericEpgAdapter(ArrayList<ArrayList<T>> verticalList, RecyclerItemClickListener.OnItemClickListener listener) {
         this.channelsList = verticalList;
+        this.listener = listener;
         recycledViewPool = new RecyclerView.RecycledViewPool();
         recycledViewPool.setMaxRecycledViews(R.layout.vrecycler_view_item, 20);
     }
@@ -70,7 +77,7 @@ public abstract class GenericEpgAdapter<T extends BaseProgramModel> extends Recy
     @Override
     public EpgViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-        ObservableRecyclerView programRow = (ObservableRecyclerView) view.findViewById(R.id.horizontal_recycler_view);
+        ObservableRecyclerView programRow = view.findViewById(R.id.horizontal_recycler_view);
         programRow.setRecycledViewPool(recycledViewPool);
         return new EpgViewHolder(view);
     }
@@ -81,7 +88,7 @@ public abstract class GenericEpgAdapter<T extends BaseProgramModel> extends Recy
     }
 
     @Override
-    public void onBindViewHolder(GenericEpgAdapter.EpgViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GenericEpgAdapter.EpgViewHolder holder, int position) {
         holder.setList(channelsList.get(position));
         holder.initialScroll();
     }

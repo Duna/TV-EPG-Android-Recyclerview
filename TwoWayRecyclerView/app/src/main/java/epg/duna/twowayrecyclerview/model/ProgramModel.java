@@ -14,6 +14,11 @@ public class ProgramModel extends BaseProgramModel {
     private int programID;
     private int avs;
 
+    public ProgramModel(long start, long end) {
+        setStartTime(start);
+        setEndTime(end);
+    }
+
     public String getTitle() {
         return title;
     }

@@ -5,8 +5,8 @@
     android:background="@android:color/black"
     android:clickable="true"
     android:orientation="vertical"
-    android:paddingBottom="1px"
-    android:paddingRight="1px">
+    android:paddingRight="1px"
+    android:paddingBottom="1px">
 
     <TextView
         android:id="@+id/program_title"
@@ -16,8 +16,9 @@
         android:background="@color/default_color"
         android:gravity="center_vertical"
         android:singleLine="true"
+        android:tag="Channel UID"
         android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/program_description"

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import epg.duna.twowayrecyclerview.R;
 
@@ -31,8 +32,9 @@ public class CustomLinearLayout extends LinearLayout {
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev != null && ev.getAction() == MotionEvent.ACTION_DOWN) {
-            TextView textTitleOrID = findViewById(R.id.program_title);
-            Toast.makeText(getContext(), "Program item clicked: " + textTitleOrID.getText(), Toast.LENGTH_SHORT).show();
+            //TextView textTitleOrID = findViewById(R.id.program_title);
+            //you can handle here also the programm click events
+            //Toast.makeText(getContext(), "Program item clicked: " + textTitleOrID.getText(), Toast.LENGTH_SHORT).show();
         }
         return super.dispatchTouchEvent(ev);
     }

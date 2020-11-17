@@ -31,6 +31,7 @@
         android:id="@+id/epg_now_indicator"
         android:layout_width="65dp"
         android:layout_height="48dp"
+        android:alpha="0.8"
         android:background="@drawable/ic_now_center"
         android:clickable="true"
         android:gravity="center"
