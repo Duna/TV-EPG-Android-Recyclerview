@@ -126,7 +126,7 @@ public class EPGView extends RelativeLayout {
     }
 
     private void updateNowIndicator() {
-        float positionOnScreen = Utils.convertMillisecondsToPx((float) (subject.getSystemTime() - subject.getCurrentTime()), getContext());
+        double positionOnScreen = Utils.convertMillisecondsToPx((subject.getSystemTime() - subject.getCurrentTime()), getContext());
         if (positionOnScreen + channelsRecyclerView.getWidth() < channelsRecyclerView.getWidth()) {
             nowVerticalLineView.setVisibility(View.INVISIBLE);
             nowTextView.setBackgroundResource(R.drawable.ic_now_left);
@@ -137,8 +137,8 @@ public class EPGView extends RelativeLayout {
                 nowVerticalLineView.setVisibility(View.VISIBLE);
                 nowTextView.setBackgroundResource(R.drawable.ic_now_center);
             }
-            nowVerticalLineView.setX(positionOnScreen + channelsRecyclerView.getWidth());
-            nowTextView.setX(positionOnScreen - nowTextView.getWidth() / 2 + channelsRecyclerView.getWidth());
+            nowVerticalLineView.setX((float) (positionOnScreen + channelsRecyclerView.getWidth()));
+            nowTextView.setX((float) (positionOnScreen - nowTextView.getWidth() / 2 + channelsRecyclerView.getWidth()));
         }
         if (positionOnScreen + channelsRecyclerView.getWidth() >= screenWidth) {
             nowVerticalLineView.setVisibility(View.INVISIBLE);
@@ -147,10 +147,11 @@ public class EPGView extends RelativeLayout {
         }
     }
 
-    //TODO fix the crash when tapping with more than one finger
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //manual dispatch events to specific view hierarchy
+        if (ev.getPointerCount() > 1)
+            return false;
         dispatchEventForView(ev, timelineRecyclerView);
         dispatchEventForView(ev, epgRecyclerView);
         dispatchEventForView(ev, channelsRecyclerView);

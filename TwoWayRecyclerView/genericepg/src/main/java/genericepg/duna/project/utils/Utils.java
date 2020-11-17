@@ -20,20 +20,20 @@ import genericepg.duna.project.model.BaseTimelineModel;
 public class Utils {
     private static BaseProgramModel programModel = new BaseProgramModel();
     private static BaseTimelineModel timelineModel = new BaseTimelineModel();
-    private static float pxPerMinConstant(Context context) {
+    private static double pxPerMinConstant(Context context) {
         return convertDpToPixel(context.getResources().getDimension(R.dimen.epg_width_one_min), context);
     }
 
-    public static float convertDpToPixel(float dp, Context context) {
+    public static double convertDpToPixel(double dp, Context context) {
         Resources r = context.getResources();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float)dp, r.getDisplayMetrics());
     }
 
-    public static float convertMillisecondsToPx(float milliseconds, Context context) {
+    public static double convertMillisecondsToPx(double milliseconds, Context context) {
         return milliseconds * pxPerMinConstant(context) / TimeUnit.MINUTES.toMillis(1);
     }
 
-    public static float convertPxToMilliseconds(float px, Context context) {
+    public static double convertPxToMilliseconds(double px, Context context) {
         return TimeUnit.MINUTES.toMillis(1) * px / pxPerMinConstant(context);
     }
 
@@ -67,6 +67,6 @@ public class Utils {
 
     public static int getInitialProgramOffsetPx(double programStartTime, double systemTime, Context context) {
         double offsetTime = systemTime - programStartTime;
-        return (int) convertMillisecondsToPx((float) offsetTime, context);
+        return (int) convertMillisecondsToPx(offsetTime, context);
     }
 }

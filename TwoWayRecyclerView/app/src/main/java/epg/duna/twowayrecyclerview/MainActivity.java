@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -49,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private GenericTimelineAdapter genericTimelineAdapter;
     private GenericChannelsAdapter channelsAdapter;
 
-    private Calendar calendar = Calendar.getInstance();
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-    private DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm");
+    private final Calendar calendar = Calendar.getInstance();
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+    private final DateFormat minutesFormat = new SimpleDateFormat("EEE dd MMM hh:mm", Locale.US);
 
     private EPGView epgView;
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        epgView = (EPGView) findViewById(R.id.epg);
+        epgView = findViewById(R.id.epg);
         createDummyData();
 
         epgAdapter = new GenericEpgAdapter(verticalList) {
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onBindData(RecyclerView.ViewHolder holder, int position) {
-                BaseTimelineModel timelineModel = (BaseTimelineModel) getItem(position);
+                BaseTimelineModel timelineModel = getItem(position);
                 TimelineViewHolder myHolder = (TimelineViewHolder) holder;
 
                 Date date = new Date(timelineModel.getTime());
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 String str = simpleDateFormat.format(date.getTime());
 
                 String day = minutesFormat.format(date.getTime());
-                myHolder.timeView.setText(str + "/" + day);
+                myHolder.timeView.setText(String.format("%s/%s", str, day));
             }
         };
 
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         epgView.setEpgAdapter(epgAdapter);
     }
 
-    public static final Uri getUriToResource(@NonNull Context context, @AnyRes int resId) throws Resources.NotFoundException {
+    private Uri getUriToResource(@NonNull Context context, @AnyRes int resId) throws Resources.NotFoundException {
         Resources res = context.getResources();
         Uri resUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
                 "://" + res.getResourcePackageName(resId)
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 ProgramModel programModel = new ProgramModel();
                 programModel.setStartTime(i);
                 Random random = new Random();
-                i = i + fifteenMin + random.nextInt((int)hour);
+                i = i + fifteenMin + random.nextInt((int) hour);
                 programModel.setEndTime(i);
                 programModel.setTitle("Title");
                 programModel.setDescription("Description");
@@ -195,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         headerChannelsList = new ArrayList<>();
         for (int i = 0; i <= 100; i++) {
             ChannelModel channelModel = new ChannelModel();
-            channelModel.setUri(getUriToResource(getApplicationContext(), R.drawable.ic_protv));
+            channelModel.setUri(getUriToResource(getApplicationContext(), i % 2 == 0 ? R.drawable.ic_protv : R.drawable.ic_bbc));
             headerChannelsList.add(channelModel);
         }
     }
