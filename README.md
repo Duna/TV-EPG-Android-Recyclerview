@@ -14,7 +14,7 @@ implementation 'genericepg.duna.project:tvepg:1.0.3'
 This is a "classic" TV EPG which works on tablets and phones and allows you to scroll in all directions (horizontal, vertical and diagonal). 
 Features:
 - clicks can be handled on each program
-- now indicator, that scrolls to current time when cklicked
+- now indicator, that scrolls to current time when clicked
 - high performance rendering using the power of the RecyclerView. 
 - tested with <b>ONE month of 100 channels</b>, using Nexus 5 - runs flawlessly
 - diagonally scrolling
