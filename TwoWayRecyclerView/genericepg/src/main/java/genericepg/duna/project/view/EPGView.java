@@ -19,8 +19,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import genericepg.duna.project.R;
-import genericepg.duna.project.adapter.GenericEpgAdapter;
 import genericepg.duna.project.adapter.GenericChannelsAdapter;
+import genericepg.duna.project.adapter.GenericEpgAdapter;
 import genericepg.duna.project.adapter.GenericTimelineAdapter;
 import genericepg.duna.project.model.BaseTimelineModel;
 import genericepg.duna.project.observable.Subject;
@@ -70,9 +70,9 @@ public class EPGView extends RelativeLayout {
         inflate(getContext(), R.layout.epg_layout, this);
         handler = new Handler();
         currentTimeTextView = (TextView) findViewById(R.id.current_time);
-        epgRecyclerView = (RecyclerView) findViewById(R.id.epg_recycler_view);
-        timelineRecyclerView = (RecyclerView) findViewById(R.id.timeline_recycler_view);
-        channelsRecyclerView = (RecyclerView) findViewById(R.id.channels_recycler_view);
+        epgRecyclerView = findViewById(R.id.epg_recycler_view);
+        timelineRecyclerView = findViewById(R.id.timeline_recycler_view);
+        channelsRecyclerView = findViewById(R.id.channels_recycler_view);
         nowVerticalLineView = findViewById(R.id.epg_now_line);
         nowTextView = (TextView) findViewById(R.id.epg_now_indicator);
 

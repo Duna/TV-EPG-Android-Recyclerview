@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 return new GenericProgramsAdapter(programList) {
                     @Override
                     public RecyclerView.ViewHolder setViewHolder(ViewGroup parent) {
-                        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.program_item, parent, false);
+                        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.program_custom_item, parent, false);
                         return new ProgramsViewHolder(itemView);
                     }
 

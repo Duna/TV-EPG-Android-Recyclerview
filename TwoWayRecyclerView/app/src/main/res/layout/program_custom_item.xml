@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<epg.duna.twowayrecyclerview.customviews.CustomLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="@dimen/epg_item_container_height"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@android:color/black"
+    android:orientation="vertical"
+    android:paddingBottom="1px"
+    android:paddingRight="1px">
+
+    <TextView
+        android:id="@+id/program_title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:background="@color/default_color"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/program_description"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6"
+        android:background="@color/default_color"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+</epg.duna.twowayrecyclerview.customviews.CustomLinearLayout>
