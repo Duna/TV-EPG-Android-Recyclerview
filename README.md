@@ -26,4 +26,6 @@ Example project is located in repo. Click the image below to watch the demo.
 
 Thats basically it. If you want to use it in your project, you need resources from the example project as well as the EPG package for it to work. If you have any questions or such don't hesitate to contact me.
 
+License: The library is free to use even in commercial apps, if your company net revenue is less than $100k/year.
+
 Good luck!
