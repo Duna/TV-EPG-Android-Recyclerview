@@ -8,7 +8,7 @@ The fastest EPG library on Earth!
 Link to your project from Mavencentral
 
 ``` 
-implementation 'genericepg.duna.project:tvepg:1.0.3'
+implementation 'genericepg.duna.project:tvepg:1.0.4'
 ```
 
 This is a "classic" TV EPG which works on tablets and phones and allows you to scroll in all directions (horizontal, vertical and diagonal). 
