@@ -198,8 +198,8 @@ public class EPGView extends RelativeLayout {
 
     private <T extends View> void dispatchEventForView(MotionEvent ev, T genericView) {
         //genericView.getLocationInWindow(location);
-        int height = timelineRecyclerView.getHeight();
-        int width = channelsRecyclerView.getWidth();
+        int height = genericView.getHeight();
+        int width = genericView.getWidth();
         MotionEvent motionEvent = MotionEvent.obtain(ev.getDownTime(), ev.getEventTime(), ev.getAction(), ev.getX() - width/*- location[0]*/, ev.getY() - height /*- location[1]*/, ev.getMetaState());
         genericView.dispatchTouchEvent(motionEvent);
     }
