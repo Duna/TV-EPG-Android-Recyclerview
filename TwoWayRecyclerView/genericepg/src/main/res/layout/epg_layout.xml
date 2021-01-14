@@ -7,16 +7,14 @@
         android:id="@+id/timeline_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="41dp"
-        android:layout_toEndOf="@+id/channels_recycler_view"
-        android:background="#fff" />
+        android:layout_toEndOf="@+id/channels_recycler_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/epg_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/timeline_recycler_view"
-        android:layout_toEndOf="@id/channels_recycler_view"
-        android:background="#fff" />
+        android:layout_toEndOf="@id/channels_recycler_view" />
 
     <View
         android:id="@+id/epg_now_line"
@@ -44,8 +42,7 @@
         android:id="@+id/channels_recycler_view"
         android:layout_width="@dimen/epg_item_container_height"
         android:layout_height="match_parent"
-        android:layout_below="@id/timeline_recycler_view"
-        android:background="#fff" />
+        android:layout_below="@id/timeline_recycler_view" />
 
     <TextView
         android:id="@+id/current_time"
