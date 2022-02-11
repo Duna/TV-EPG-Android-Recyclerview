@@ -179,13 +179,17 @@ public class EPGView extends RelativeLayout {
         }
     }
 
-    //TODO fix the crash when tapping with more than one finger
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //manual dispatch events to specific view hierarchy
-        dispatchEventForView(ev, timelineRecyclerView);
-        dispatchEventForView(ev, epgRecyclerView);
-        dispatchEventForView(ev, channelsRecyclerView);
+        // ACTION_POINTER_DOWN -> fired when second finger touches the screen
+        // ACTION_POINTER_UP -> fired when second finger is lifted
+        if ((ev.getActionMasked() != MotionEvent.ACTION_POINTER_DOWN)
+                && (ev.getActionMasked() != MotionEvent.ACTION_POINTER_UP)) {
+            dispatchEventForView(ev, timelineRecyclerView);
+            dispatchEventForView(ev, epgRecyclerView);
+            dispatchEventForView(ev, channelsRecyclerView);
+        }
 
         nowTextView.getLocationInWindow(location);
         Rect editTextRect = new Rect();
