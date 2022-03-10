@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -188,7 +189,6 @@ public class EPGView extends RelativeLayout {
                 && (ev.getActionMasked() != MotionEvent.ACTION_POINTER_UP)) {
             dispatchEventForView(ev, timelineRecyclerView);
             dispatchEventForView(ev, epgRecyclerView);
-            dispatchEventForView(ev, channelsRecyclerView);
         }
 
         nowTextView.getLocationInWindow(location);
@@ -211,6 +211,17 @@ public class EPGView extends RelativeLayout {
     public void setEpgAdapter(GenericEpgAdapter epgAdapter) {
         epgRecyclerView.setAdapter(epgAdapter);
         epgAdapter.setSubject(subject);
+        setListener();
+    }
+
+    private void setListener() {
+        epgRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                channelsRecyclerView.scrollBy(dx, dy);
+            }
+        });
     }
 
     public void setChannelsAdapter(GenericChannelsAdapter channelsAdapter) {

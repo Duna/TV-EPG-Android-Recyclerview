@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         headerChannelsList = new ArrayList<>();
         for (int i = 0; i <= 100; i++) {
             ChannelModel channelModel = new ChannelModel();
-            channelModel.setUri(getUriToResource(getApplicationContext(), i % 2 == 0 ? R.drawable.ic_protv : R.drawable.ic_bbc));
+            channelModel.setUri(getUriToResource(getApplicationContext(), i % 3 == 0 ? R.drawable.ic_protv : i % 2 == 0 ? R.drawable.ic_fox : R.drawable.ic_bbc));
             headerChannelsList.add(channelModel);
         }
     }
